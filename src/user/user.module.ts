@@ -9,7 +9,7 @@ import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([User, Tag])],
+	imports: [TypeOrmModule.forFeature([User, Tag], 'postgres')],
 	controllers: [UserController],
 	providers: [UserService, UserRepository],
 	exports: [UserService, UserRepository],

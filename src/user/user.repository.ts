@@ -9,7 +9,7 @@ import { IRegisterUser } from '../common/interfaces/register-user.interface';
 @Injectable()
 export class UserRepository {
 	constructor(
-		@InjectRepository(User)
+		@InjectRepository(User, 'postgres')
 		private readonly userRepository: Repository<User>,
 	) {}
 

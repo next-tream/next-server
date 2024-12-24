@@ -12,7 +12,7 @@ export class KakaoMiddleware implements NestMiddleware {
 		if (!token) {
 			throw new ForbiddenException('Authorization 헤더가 없습니다.');
 		}
-
+		console.log(token);
 		try {
 			const response = await fetch('https://kapi.kakao.com/v2/user/me', {
 				headers: { Authorization: `Bearer ${token}` },

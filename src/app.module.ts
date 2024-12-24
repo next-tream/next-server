@@ -10,6 +10,7 @@ import { CodeModule } from './code/code.module';
 import { ConfigModule } from '@nestjs/config';
 import { KakaoMiddleware } from './common/middlewares/kakao.middleware';
 import { MailModule } from './mail/mail.module';
+import { MongoDBConfig } from './common/configs/mongoDB.config';
 import { PostgreSQLConfig } from './common/configs/postgreSQL.config';
 import { SocialModule } from './social/social.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -22,9 +23,17 @@ import { validationSchema } from './common/configs/validation.schema';
 			isGlobal: true,
 			validationSchema,
 		}),
+
 		TypeOrmModule.forRootAsync({
 			useClass: PostgreSQLConfig,
+			name: 'postgres',
 		}),
+
+		TypeOrmModule.forRootAsync({
+			useClass: MongoDBConfig,
+			name: 'mongo',
+		}),
+
 		AuthModule,
 		UserModule,
 		CodeModule,

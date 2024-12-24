@@ -29,6 +29,13 @@ export class SocialController {
 			maxAge: 604800000,
 		});
 
+		res.cookie('accessToken', accessToken, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'prod',
+			sameSite: 'none',
+			maxAge: 3600,
+		});
+
 		return { accessToken };
 	}
 
