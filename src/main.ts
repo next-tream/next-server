@@ -13,6 +13,11 @@ import { sessionConfig } from './common/configs/session.config';
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
+	app.enableCors({
+		origin: 'https://nextream.store',
+		credentials: true,
+	});
+
 	app.useGlobalGuards(new JwtGuard());
 
 	app.useGlobalInterceptors(new LoggingInterceptor());
