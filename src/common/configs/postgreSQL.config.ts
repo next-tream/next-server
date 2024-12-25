@@ -13,8 +13,6 @@ export class PostgreSQLConfig implements TypeOrmOptionsFactory {
 	constructor(private readonly configService: ConfigService) {}
 
 	createTypeOrmOptions(): TypeOrmModuleOptions {
-		const isDev = this.configService.get<string>('ENV') === 'dev';
-
 		return {
 			type: 'postgres',
 			url: this.configService.get<string>('RDS_DB_URL'),
@@ -23,11 +21,9 @@ export class PostgreSQLConfig implements TypeOrmOptionsFactory {
 			autoLoadEntities: true,
 			logging: false,
 			namingStrategy: new SnakeNamingStrategy(),
-			...(isDev && {
-				ssl: {
-					rejectUnauthorized: false,
-				},
-			}),
+			ssl: {
+				rejectUnauthorized: false,
+			},
 		};
 	}
 }

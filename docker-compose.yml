@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" 
+    environment:
+      NODE_ENV: ${ENV}            
+      HTTP_PORT: ${HTTP_PORT}
+      RDS_DB_URL: ${RDS_DB_URL}   
+      MONGO_DB_URI: ${MONGO_DB_URI} 
+      MONGO_DB_DATABASE: ${MONGO_DB_DATABASE}
+      REDIS_HOST: ${REDIS_HOST}   
+      REDIS_PORT: ${REDIS_PORT}   
+      REDIS_PASSWORD: ${REDIS_PASSWORD} 
+      HASH_ROUND: ${HASH_ROUND}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_ADDRESS: ${EMAIL_ADDRESS}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      SESSION_SECRET: ${SESSION_SECRET}
+    volumes:
+      - .:/app 
+    restart: always

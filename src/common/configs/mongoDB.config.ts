@@ -14,8 +14,9 @@ export class MongoDBConfig implements TypeOrmOptionsFactory {
 			type: 'mongodb',
 			url: this.configService.get<string>('MONGO_DB_URI'),
 			database: this.configService.get<string>('MONGO_DB_DATABASE'),
+			useNewUrlParser: true,
 			useUnifiedTopology: true,
-			synchronize: true,
+			synchronize: this.configService.get<string>('ENV') === 'dev',
 			logging: true,
 		};
 	}
