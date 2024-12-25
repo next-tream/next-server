@@ -17,7 +17,7 @@ export class PostgreSQLConfig implements TypeOrmOptionsFactory {
 			type: 'postgres',
 			url: this.configService.get<string>('RDS_DB_URL'),
 			entities: [User, Tag],
-			synchronize: true,
+			synchronize: this.configService.get<string>('ENV') === 'dev',
 			autoLoadEntities: true,
 			logging: false,
 			namingStrategy: new SnakeNamingStrategy(),
