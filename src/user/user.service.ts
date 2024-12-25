@@ -1,6 +1,5 @@
 /** @format */
 
-import { EUserColor } from '../common/enums/user-color.enum';
 import { IRegisterUser } from '../common/interfaces/register-user.interface';
 import { IUserTag } from 'src/common/interfaces/user-tag.interface';
 import { IVerify } from '../common/interfaces/verify.interface';
@@ -23,11 +22,5 @@ export class UserService {
 
 	async createUserTag({ sub, tags }: IUserTag) {
 		console.log(sub, tags);
-	}
-
-	getRandomUserColor(): EUserColor {
-		const colors = Object.values(EUserColor);
-		const index = Math.floor(Math.random() * colors.length);
-		return colors[index];
 	}
 }

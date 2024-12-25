@@ -14,6 +14,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { User } from '../user/entity/user.entity';
 import { UserRepository } from '../user/user.repository';
 import { UserService } from '../user/user.service';
+import { getRandomUserColor } from 'src/common/utils/getRandomUserColor';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
 		await this.userService.verifySignup(verifyObject);
 
 		const hashPassword: string = await this.bcryptService.transformPassword(password);
-		const color: EUserColor = this.userService.getRandomUserColor();
+		const color: EUserColor = getRandomUserColor();
 
 		this.codeService.setCode(verifyObject.email);
 

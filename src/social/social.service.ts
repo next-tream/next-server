@@ -9,6 +9,7 @@ import { KakaoDto } from './dto/kakao.dto';
 import { User } from 'src/user/entity/user.entity';
 import { UserRepository } from 'src/user/user.repository';
 import { UserService } from 'src/user/user.service';
+import { getRandomUserColor } from 'src/common/utils/getRandomUserColor';
 
 @Injectable()
 export class SocialService {
@@ -25,7 +26,7 @@ export class SocialService {
 			throw new BadRequestException('이미 등록된 유저입니다.');
 		}
 
-		const color: EUserColor = this.userService.getRandomUserColor();
+		const color: EUserColor = getRandomUserColor();
 
 		user = await this.userService.registerUser({
 			...rest,

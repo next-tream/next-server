@@ -23,22 +23,30 @@ import { IAccessToken } from 'src/common/interfaces/access-token.interface';
 import { Response } from 'express';
 import { User } from 'src/common/decorators/user.decorator';
 import { IPayload } from 'src/common/interfaces/payload.interface';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@HttpCode(HttpStatus.CREATED)
+	@ApiOperation({
+		summary: '회원가입',
+	})
 	@Post('signup')
 	signup(@Body() createUserDto: CreateUserDto) {
 		return this.authService.createUser(createUserDto);
 	}
 
 	@HttpCode(HttpStatus.OK)
+	@ApiOperation({
+		summary: '사용자 로그인',
+	})
 	@UseGuards(LocalGuard)
 	@Post('login')
 	async login(
 		@Req() req: any,
+		@Body() loginUserDto: LoginUserDto,
 		@Res({ passthrough: true }) res: Response,
 		@Session() session: Record<string, any>,
 	): Promise<IAccessToken> {
@@ -58,12 +66,18 @@ export class AuthController {
 	}
 
 	@HttpCode(HttpStatus.OK)
+	@ApiOperation({
+		summary: '비밀번호 변경',
+	})
 	@Post('change/password')
 	changePassword(@Body() body: LoginUserDto): Promise<void> {
 		return this.authService.changePassword(body);
 	}
 
 	@HttpCode(HttpStatus.CREATED)
+	@ApiOperation({
+		summary: '토큰 재발급',
+	})
 	@UseGuards(RefreshTokenGuard)
 	@Post('reissue')
 	async reissueAccessToken(@User() { sub }: IPayload): Promise<IAccessToken> {
@@ -73,6 +87,9 @@ export class AuthController {
 	}
 
 	@HttpCode(HttpStatus.OK)
+	@ApiOperation({
+		summary: '로그아웃',
+	})
 	@Delete('logout')
 	logout(@User() { sub }: IPayload, @Session() session: Record<string, any>) {
 		const refreshtoken = session[sub];

@@ -5,12 +5,16 @@ import { KakaoDto } from './dto/kakao.dto';
 import { SocialService } from './social.service';
 
 import { Response } from 'express';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('social')
 export class SocialController {
 	constructor(private readonly socialService: SocialService) {}
 
 	@HttpCode(HttpStatus.CREATED)
+	@ApiOperation({
+		summary: '카카오 로그인',
+	})
 	@Get('kakao')
 	async loginKakao(
 		@Req() { user }: { user: KakaoDto },
@@ -40,6 +44,9 @@ export class SocialController {
 	}
 
 	@Get('naver')
+	@ApiOperation({
+		summary: '네이버 로그인',
+	})
 	loginNaver() {
 		return 'hello world';
 	}
