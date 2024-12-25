@@ -3,6 +3,7 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	HttpCode,
 	HttpStatus,
 	Post,
@@ -19,7 +20,7 @@ import { IToken } from 'src/common/interfaces/token.interface';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RefreshTokenGuard } from 'src/common/guards/refresh-token.guard';
 import { IAccessToken } from 'src/common/interfaces/access-token.interface';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { User } from 'src/common/decorators/user.decorator';
 import { IPayload } from 'src/common/interfaces/payload.interface';
 
@@ -37,12 +38,10 @@ export class AuthController {
 	@UseGuards(LocalGuard)
 	@Post('login')
 	async login(
-		@Body() body,
 		@Req() req: any,
 		@Res({ passthrough: true }) res: Response,
 		@Session() session: Record<string, any>,
 	): Promise<IAccessToken> {
-		console.log(body);
 		const { accessToken, refreshToken }: IToken = await this.authService.login(req.user.id);
 
 		const userId = req.user.id;
@@ -58,6 +57,7 @@ export class AuthController {
 		return { accessToken };
 	}
 
+	@HttpCode(HttpStatus.OK)
 	@Post('change/password')
 	changePassword(@Body() body: LoginUserDto): Promise<void> {
 		return this.authService.changePassword(body);
@@ -70,5 +70,13 @@ export class AuthController {
 		const accessToken = await this.authService.generateAccessToken({ sub });
 
 		return { accessToken };
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Delete('logout')
+	logout(@User() { sub }: IPayload, @Session() session: Record<string, any>) {
+		const refreshtoken = session[sub];
+
+		if (refreshtoken) delete session[sub];
 	}
 }

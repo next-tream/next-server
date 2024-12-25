@@ -1,3 +1,3 @@
 /** @format */
 
-export const allowedPaths: string[] = ['social', 'code', 'auth'];
+export const allowedPaths: string[] = ['social', 'code', 'signup', 'login', 'password', 'reissue'];
