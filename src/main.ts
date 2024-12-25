@@ -1,6 +1,7 @@
 /** @format */
 
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory, Reflector } from '@nestjs/core';
 
 import { AppModule } from './app.module';
@@ -34,6 +35,15 @@ async function bootstrap() {
 	app.useGlobalFilters(new HttpExceptionFilter());
 
 	sessionConfig(app);
+
+	const config = new DocumentBuilder()
+		.setTitle('Nextream')
+		.setDescription('Nextream API 명세서')
+		.setVersion('1.0')
+		.build();
+
+	const document = SwaggerModule.createDocument(app, config);
+	SwaggerModule.setup('doc', app, document);
 
 	app.use(cookieParser());
 
