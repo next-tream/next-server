@@ -1,13 +1,14 @@
 /** @format */
 
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory, Reflector } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { JwtGuard } from './common/guards/jwt.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { SwaggerConfig } from './common/configs/swagger.config';
+import { SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import { sessionConfig } from './common/configs/session.config';
 
@@ -19,6 +20,8 @@ async function bootstrap() {
 		credentials: true,
 	});
 
+	app.use(cookieParser());
+
 	app.useGlobalGuards(new JwtGuard());
 
 	app.useGlobalInterceptors(new LoggingInterceptor());
@@ -27,6 +30,7 @@ async function bootstrap() {
 		new ValidationPipe({
 			whitelist: true,
 			transform: true,
+			forbidNonWhitelisted: true,
 		}),
 	);
 
@@ -36,22 +40,12 @@ async function bootstrap() {
 
 	sessionConfig(app);
 
-	const config = new DocumentBuilder()
-		.setTitle('Nextream')
-		.setDescription('Nextream API 명세서')
-		.setVersion('1.0')
-		.addBearerAuth()
-		.addBasicAuth()
-		.build();
-
-	const document = SwaggerModule.createDocument(app, config);
+	const document = SwaggerModule.createDocument(app, SwaggerConfig);
 	SwaggerModule.setup('doc', app, document, {
 		swaggerOptions: {
 			persistAuthorization: true,
 		},
 	});
-
-	app.use(cookieParser());
 
 	await app.listen(process.env.HTTP_PORT ?? 8080);
 }
