@@ -5,18 +5,20 @@ import {
 	ArrayMinSize,
 	ArrayUnique,
 	IsArray,
-	IsEnum,
+	IsInt,
 	IsNotEmpty,
+	Max,
+	Min,
 } from 'class-validator';
-
-import { ETag } from '../../common/enums/tag.enum';
 
 export class TagDto {
 	@IsArray()
 	@ArrayMinSize(1)
 	@ArrayMaxSize(5)
-	@IsEnum(ETag, { each: true })
 	@IsNotEmpty({ each: true })
 	@ArrayUnique()
-	tags: ETag[];
+	@IsInt({ each: true })
+	@Min(1, { each: true })
+	@Max(12, { each: true })
+	tags: number[];
 }
