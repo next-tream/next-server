@@ -45,7 +45,7 @@ jobs:
                 aws elasticbeanstalk create-application-version \
                   --application-name "Nextream-Server-EB" \
                   --version-label $GITHUB_SHA \
-                  --source-bundle S3Bucket="elasticbeanstalk-ap-northeast-2-891376975821", S3Key="deploy.zip"
+                  --source-bundle S3Bucket="elasticbeanstalk-ap-northeast-2-891376975821" S3Key="deploy.zip"
 
                 aws elasticbeanstalk update-environment \
                 --application-name "Nextream-Server-EB" \
