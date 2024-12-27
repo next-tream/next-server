@@ -2,9 +2,9 @@
 
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entity/user.entity';
+import { User } from '../entity/user.entity';
 import { Repository } from 'typeorm';
-import { IRegisterUser } from '../common/interfaces/register-user.interface';
+import { IRegisterUser } from '../../common/interfaces/register-user.interface';
 
 @Injectable()
 export class UserRepository {
@@ -35,13 +35,14 @@ export class UserRepository {
 		return user;
 	}
 
-	async isUUIDAvailable(id: number): Promise<void> {
+	async isUUIDAvailable(id: number): Promise<User> {
 		const user: User = await this.userRepository.findOneBy({
 			id,
 		});
 		if (!user) {
 			throw new NotFoundException('uuid 없음');
 		}
+		return user;
 	}
 
 	async isNicknameAvailable(nickname: string): Promise<void> {
@@ -57,7 +58,7 @@ export class UserRepository {
 	async createUser(registerUser: IRegisterUser): Promise<User> {
 		const user: User = this.userRepository.create(registerUser);
 
-		return await this.userRepository.save(user);
+		return await this.saveUser(user);
 	}
 
 	async verifyUser(email: string) {
@@ -67,7 +68,7 @@ export class UserRepository {
 		await this.saveUser(user);
 	}
 
-	async saveUser(user: User): Promise<void> {
-		await this.userRepository.save(user);
+	async saveUser(user: User): Promise<User> {
+		return await this.userRepository.save(user);
 	}
 }

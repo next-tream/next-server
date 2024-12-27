@@ -52,7 +52,7 @@ export class User extends BaseTable {
 	@Column({ nullable: true })
 	image?: string;
 
-	@ManyToMany(() => Tag, (tag) => tag.users)
+	@ManyToMany(() => Tag, (tag) => tag.users, { cascade: true })
 	@JoinTable()
 	tags: Tag[];
 }

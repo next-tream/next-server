@@ -11,7 +11,7 @@ import { CodeRepository } from './code.repository';
 import { CompareCodeDto } from './dto/compare-code.dto';
 import { IEmail } from 'src/common/interfaces/email.interface';
 import { MailService } from 'src/mail/mail.service';
-import { UserRepository } from 'src/user/user.repository';
+import { UserRepository } from 'src/user/repository/user.repository';
 import { randomInt } from 'crypto';
 
 @Injectable()

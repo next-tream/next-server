@@ -12,7 +12,7 @@ import { IToken } from 'src/common/interfaces/token.interface';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { User } from '../user/entity/user.entity';
-import { UserRepository } from '../user/user.repository';
+import { UserRepository } from '../user/repository/user.repository';
 import { UserService } from '../user/user.service';
 import { getRandomUserColor } from 'src/common/utils/getRandomUserColor';
 

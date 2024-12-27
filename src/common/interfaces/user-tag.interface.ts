@@ -1,6 +1,8 @@
 /** @format */
 
+import { User } from 'src/user/entity/user.entity';
+
 export interface IUserTag {
-	sub: number;
+	user: User;
 	tags: number[];
 }

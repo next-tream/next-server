@@ -7,7 +7,7 @@ import { ELoginType } from 'src/common/enums/loging-type.enum';
 import { EUserColor } from 'src/common/enums/user-color.enum';
 import { KakaoDto } from './dto/kakao.dto';
 import { User } from 'src/user/entity/user.entity';
-import { UserRepository } from 'src/user/user.repository';
+import { UserRepository } from 'src/user/repository/user.repository';
 import { UserService } from 'src/user/user.service';
 import { getRandomUserColor } from 'src/common/utils/getRandomUserColor';
 
