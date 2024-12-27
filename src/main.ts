@@ -38,6 +38,8 @@ async function bootstrap() {
 
 	app.useGlobalFilters(new HttpExceptionFilter());
 
+	app.setGlobalPrefix('api');
+
 	sessionConfig(app);
 
 	const document = SwaggerModule.createDocument(app, SwaggerConfig);

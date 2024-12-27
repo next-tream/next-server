@@ -16,6 +16,7 @@ import { SocialModule } from './social/social.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { validationSchema } from './common/configs/validation.schema';
+import { TwoFactorAuthenticationModule } from './two-factor-authentication/two-factor-authentication.module';
 
 @Module({
 	imports: [
@@ -40,6 +41,7 @@ import { validationSchema } from './common/configs/validation.schema';
 		BcryptModule,
 		MailModule,
 		SocialModule,
+		TwoFactorAuthenticationModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
