@@ -24,6 +24,9 @@ export class PostgreSQLConfig implements TypeOrmOptionsFactory {
 			ssl: {
 				rejectUnauthorized: false,
 			},
+			extra: {
+				options: '-c timezone=Asia/Seoul',
+			},
 		};
 	}
 }
