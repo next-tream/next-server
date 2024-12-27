@@ -1,6 +1,6 @@
 /** @format */
 
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { ConfigService } from '@nestjs/config';
@@ -25,6 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		const user = await this.userRepository.isUUIDAvailable(payload.sub);
 
 		if (payload.type !== 'access') throw new BadRequestException('토큰 이상함');
+		if (!user.isVerified) throw new ForbiddenException('이메일 인증 되지 않음');
 
 		return user;
 	}
