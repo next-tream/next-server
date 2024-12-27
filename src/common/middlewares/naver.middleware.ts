@@ -5,7 +5,7 @@ import { ForbiddenException, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request } from 'express';
 
 @Injectable()
-export class KakaoMiddleware implements NestMiddleware {
+export class NaverMiddleware implements NestMiddleware {
 	async use(req: Request, res: any, next: () => void): Promise<void> {
 		const token = req.headers.authorization?.split(' ')[1];
 
@@ -14,7 +14,7 @@ export class KakaoMiddleware implements NestMiddleware {
 		}
 
 		try {
-			const response = await fetch(process.env.KAKAO_URL, {
+			const response = await fetch(process.env.NAVER_URL, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 
@@ -22,13 +22,14 @@ export class KakaoMiddleware implements NestMiddleware {
 				throw new ForbiddenException('유효하지 않은 Kakao 토큰입니다.');
 			}
 
-			const { kakao_account } = await response.json();
+			const data = await response.json();
+			console.log(data);
 
-			req.user = {
-				email: kakao_account.email,
-				nickname: kakao_account.profile.nickname,
-				image: kakao_account.profile?.profile_image_url,
-			};
+			// req.user = {
+			// 	email: kakao_account.email,
+			// 	nickname: kakao_account.profile.nickname,
+			// 	image: kakao_account.profile?.profile_image_url,
+			// };
 
 			next();
 		} catch (err) {

@@ -11,12 +11,13 @@ import { ConfigModule } from '@nestjs/config';
 import { KakaoMiddleware } from './common/middlewares/kakao.middleware';
 import { MailModule } from './mail/mail.module';
 import { MongoDBConfig } from './common/configs/mongoDB.config';
+import { NaverMiddleware } from './common/middlewares/naver.middleware';
 import { PostgreSQLConfig } from './common/configs/postgreSQL.config';
 import { SocialModule } from './social/social.module';
+import { TwoFactorAuthenticationModule } from './two-factor-authentication/two-factor-authentication.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { validationSchema } from './common/configs/validation.schema';
-import { TwoFactorAuthenticationModule } from './two-factor-authentication/two-factor-authentication.module';
 
 @Module({
 	imports: [
@@ -49,5 +50,6 @@ import { TwoFactorAuthenticationModule } from './two-factor-authentication/two-f
 export class AppModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {
 		consumer.apply(KakaoMiddleware).forRoutes('/social/kakao');
+		consumer.apply(NaverMiddleware).forRoutes('/social/naver');
 	}
 }
