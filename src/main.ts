@@ -1,6 +1,6 @@
 /** @format */
 
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 
 import { AppModule } from './app.module';
@@ -38,7 +38,9 @@ async function bootstrap() {
 
 	app.useGlobalFilters(new HttpExceptionFilter());
 
-	app.setGlobalPrefix('api');
+	app.setGlobalPrefix('api', {
+		exclude: [{ path: '/', method: RequestMethod.ALL }],
+	});
 
 	sessionConfig(app);
 
