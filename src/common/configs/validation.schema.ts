@@ -17,4 +17,8 @@ export const validationSchema = Joi.object({
 	EMAIL_ADDRESS: Joi.string().required(),
 	EMAIL_PASSWORD: Joi.string().required(),
 	SESSION_SECRET: Joi.string().required(),
+	NAVER_URL: Joi.string().required(),
+	KAKAO_URL: Joi.string().required(),
+	AWS_S3_ACCESS_KEY: Joi.string().required(),
+	AWS_S3_SECRET_ACCESS_KEY: Joi.string().required(),
 });

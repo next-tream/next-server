@@ -4,9 +4,11 @@ import {
 	Body,
 	Controller,
 	Delete,
+	Get,
 	HttpCode,
 	HttpStatus,
 	Post,
+	Query,
 	Req,
 	Res,
 	Session,
@@ -57,6 +59,31 @@ export class AuthController {
 		session[userId] = { refreshToken };
 
 		res.cookie('sessionId', userId, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'prod',
+			sameSite: 'none',
+			maxAge: 604800000,
+		});
+
+		return { accessToken };
+	}
+
+	@HttpCode(HttpStatus.CREATED)
+	@ApiOperation({
+		summary: '소셜 로그인',
+	})
+	@Get()
+	async loginSocial(
+		@DUser() user: User,
+		@Query('social') social: string,
+		@Res({ passthrough: true }) res: Response,
+		@Session() session: Record<string, any>,
+	) {
+		const { accessToken, refreshToken, id } = await this.authService.loginSocial(user);
+
+		session[id] = { refreshToken };
+
+		res.cookie('sessionId', id, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'prod',
 			sameSite: 'none',

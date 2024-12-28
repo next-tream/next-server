@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EUserColor } from '../common/enums/user-color.enum';
 import { IPayload } from 'src/common/interfaces/payload.interface';
+import { ISocial } from 'src/common/interfaces/social.interface';
 import { IToken } from 'src/common/interfaces/token.interface';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -47,6 +48,29 @@ export class AuthService {
 			accessToken: await this.generateAccessToken({ sub: id }),
 			refreshToken: await this.generateRefreshToken({ sub: id }),
 		};
+	}
+
+	async loginSocial({ email, ...rest }: User): Promise<ISocial> {
+		let user: User | null = await this.userRepository.findUserForEmail(email, true);
+
+		if (user) {
+			throw new BadRequestException('이미 등록된 유저입니다.');
+		}
+
+		const color: EUserColor = getRandomUserColor();
+
+		user = await this.userService.registerUser({
+			...rest,
+			color,
+			email,
+			isVerified: true,
+			loginType: rest.loginType,
+		});
+		console.log(user);
+
+		const token = await this.login(user.id);
+
+		return { ...token, id: user.id };
 	}
 
 	async autheticate(email: string, password: string): Promise<User> {
