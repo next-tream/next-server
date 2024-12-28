@@ -1,6 +1,11 @@
 /** @format */
 
-import { ForbiddenException, Injectable, NestMiddleware } from '@nestjs/common';
+import {
+	BadRequestException,
+	ForbiddenException,
+	Injectable,
+	NestMiddleware,
+} from '@nestjs/common';
 
 import { ELoginType } from '../enums/loging-type.enum';
 import { Request } from 'express';
@@ -16,7 +21,7 @@ export class SocialMiddleware implements NestMiddleware {
 		}
 
 		if (!social) {
-			throw new ForbiddenException('쿼리스트링에 social 로그인 정보를 입력해주세요');
+			throw new BadRequestException('쿼리스트링에 social 로그인 정보를 입력해주세요');
 		}
 		const url = social === ELoginType.KAKAO ? process.env.KAKAO_URL : process.env.NAVER_URL;
 

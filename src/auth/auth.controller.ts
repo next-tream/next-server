@@ -24,7 +24,6 @@ import { RefreshTokenGuard } from 'src/common/guards/refresh-token.guard';
 import { IAccessToken } from 'src/common/interfaces/access-token.interface';
 import { Response } from 'express';
 import { DUser } from 'src/common/decorators/user.decorator';
-
 import { ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/user/entity/user.entity';
 
