@@ -4,16 +4,20 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
-import { allowedPaths } from '../constants/allowed-path.const';
+import { Public } from '../decorators/pubilc.decorator';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class JwtGuard extends AuthGuard('jwt') {
+	constructor(private readonly reflector: Reflector) {
+		super();
+	}
 	canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-		const request = context.switchToHttp().getRequest();
-		const url: string = request.url;
+		const isPublic = this.reflector.get(Public, context.getHandler());
 
-		if (allowedPaths.some((path: string) => url.includes(path))) return true;
-
+		if (isPublic) {
+			return true;
+		}
 		return super.canActivate(context);
 	}
 }
