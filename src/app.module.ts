@@ -1,6 +1,6 @@
 /** @format */
 
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -46,6 +46,9 @@ import { validationSchema } from './common/configs/validation.schema';
 })
 export class AppModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {
-		consumer.apply(SocialMiddleware).forRoutes('/auth');
+		consumer.apply(SocialMiddleware).forRoutes({
+			path: '/auth/login',
+			method: RequestMethod.GET,
+		});
 	}
 }

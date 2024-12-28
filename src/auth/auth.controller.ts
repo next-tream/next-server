@@ -72,7 +72,7 @@ export class AuthController {
 	@ApiOperation({
 		summary: '소셜 로그인',
 	})
-	@Get()
+	@Get('login')
 	async loginSocial(
 		@DUser() user: User,
 		@Query('social') social: string,
