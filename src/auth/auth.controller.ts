@@ -24,8 +24,9 @@ import { RefreshTokenGuard } from 'src/common/guards/refresh-token.guard';
 import { IAccessToken } from 'src/common/interfaces/access-token.interface';
 import { Response } from 'express';
 import { DUser } from 'src/common/decorators/user.decorator';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/user/entity/user.entity';
+import { DPublic } from 'src/common/decorators/pubilc.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -35,6 +36,7 @@ export class AuthController {
 	@ApiOperation({
 		summary: '회원가입',
 	})
+	@DPublic()
 	@Post('signup')
 	signup(@Body() createUserDto: CreateUserDto) {
 		return this.authService.createUser(createUserDto);
@@ -45,6 +47,7 @@ export class AuthController {
 		summary: '사용자 로그인',
 	})
 	@UseGuards(LocalGuard)
+	@DPublic()
 	@Post('login')
 	async login(
 		@Req() req: any,
@@ -96,6 +99,7 @@ export class AuthController {
 	@ApiOperation({
 		summary: '비밀번호 변경',
 	})
+	@DPublic()
 	@Post('change/password')
 	changePassword(@Body() body: LoginUserDto): Promise<void> {
 		return this.authService.changePassword(body);
@@ -106,6 +110,7 @@ export class AuthController {
 		summary: '토큰 재발급',
 	})
 	@UseGuards(RefreshTokenGuard)
+	@DPublic()
 	@Post('reissue')
 	async reissueAccessToken(@DUser() { id }: User): Promise<IAccessToken> {
 		const accessToken = await this.authService.generateAccessToken({ sub: id });
@@ -117,6 +122,7 @@ export class AuthController {
 	@ApiOperation({
 		summary: '로그아웃',
 	})
+	@ApiBearerAuth()
 	@Delete('logout')
 	logout(@DUser() { id }: User, @Session() session: Record<string, any>) {
 		const refreshtoken = session[id];

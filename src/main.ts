@@ -22,7 +22,7 @@ async function bootstrap() {
 
 	app.use(cookieParser());
 
-	app.useGlobalGuards(new JwtGuard());
+	app.useGlobalGuards(new JwtGuard(app.get(Reflector)));
 
 	app.useGlobalInterceptors(new LoggingInterceptor());
 

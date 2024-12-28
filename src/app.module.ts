@@ -12,7 +12,6 @@ import { MailModule } from './mail/mail.module';
 import { MongoDBConfig } from './common/configs/mongoDB.config';
 import { PostgreSQLConfig } from './common/configs/postgreSQL.config';
 import { SocialMiddleware } from './common/middlewares/social.middleware';
-import { TwoFactorAuthenticationModule } from './two-factor-authentication/two-factor-authentication.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { validationSchema } from './common/configs/validation.schema';
@@ -39,7 +38,6 @@ import { validationSchema } from './common/configs/validation.schema';
 		CodeModule,
 		BcryptModule,
 		MailModule,
-		TwoFactorAuthenticationModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
