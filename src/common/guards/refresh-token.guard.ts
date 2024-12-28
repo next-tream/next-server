@@ -44,7 +44,7 @@ export class RefreshTokenGuard implements CanActivate {
 			throw new ForbiddenException('refreshToken이 이상합니다.');
 		}
 
-		request.id = { sub: payload.sub };
+		request.id = { sub: payload.id };
 		return true;
 	}
 }

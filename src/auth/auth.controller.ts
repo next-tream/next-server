@@ -9,7 +9,6 @@ import {
 	HttpStatus,
 	Post,
 	Query,
-	Req,
 	Res,
 	Session,
 	UseGuards,
@@ -50,14 +49,19 @@ export class AuthController {
 	@DPublic()
 	@Post('login')
 	async login(
-		@Req() req: any,
+		@DUser() { id, role, email, nickname }: User,
 		@Body() loginUserDto: LoginUserDto,
 		@Res({ passthrough: true }) res: Response,
 		@Session() session: Record<string, any>,
 	): Promise<IAccessToken> {
-		const { accessToken, refreshToken }: IToken = await this.authService.login(req.user.id);
+		const { accessToken, refreshToken }: IToken = await this.authService.login({
+			id,
+			role,
+			email,
+			nickname,
+		});
 
-		const userId = req.user.id;
+		const userId = id;
 		session[userId] = { refreshToken };
 
 		res.cookie('sessionId', userId, {
@@ -112,8 +116,13 @@ export class AuthController {
 	@UseGuards(RefreshTokenGuard)
 	@DPublic()
 	@Post('reissue')
-	async reissueAccessToken(@DUser() { id }: User): Promise<IAccessToken> {
-		const accessToken = await this.authService.generateAccessToken({ sub: id });
+	async reissueAccessToken(@DUser() { id, role, email, nickname }: User): Promise<IAccessToken> {
+		const accessToken = await this.authService.generateAccessToken({
+			id,
+			role,
+			email,
+			nickname,
+		});
 
 		return { accessToken };
 	}

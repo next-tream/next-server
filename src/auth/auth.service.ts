@@ -43,10 +43,10 @@ export class AuthService {
 		});
 	}
 
-	async login(id: number): Promise<IToken> {
+	async login(payload: IPayload): Promise<IToken> {
 		return {
-			accessToken: await this.generateAccessToken({ sub: id }),
-			refreshToken: await this.generateRefreshToken({ sub: id }),
+			accessToken: await this.generateAccessToken(payload),
+			refreshToken: await this.generateRefreshToken(payload),
 		};
 	}
 
@@ -66,9 +66,13 @@ export class AuthService {
 			isVerified: true,
 			loginType: rest.loginType,
 		});
-		console.log(user);
 
-		const token = await this.login(user.id);
+		const token = await this.login({
+			id: user.id,
+			email: user.email,
+			role: user.role,
+			nickname: user.nickname,
+		});
 
 		return { ...token, id: user.id };
 	}

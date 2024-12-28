@@ -1,6 +1,6 @@
 /** @format */
 
-import { ELoginType } from '../enums/loging-type.enum';
+import { ELoginType } from '../enums/login-type.enum';
 import { EUserColor } from '../enums/user-color.enum';
 import { IVerify } from './verify.interface';
 

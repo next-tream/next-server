@@ -3,7 +3,8 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { BaseTable } from '../../common/entity/base-table.entity';
-import { ELoginType } from '../../common/enums/loging-type.enum';
+import { ELoginType } from '../../common/enums/login-type.enum';
+import { ERole } from 'src/common/enums/role.enum';
 import { EUserColor } from '../../common/enums/user-color.enum';
 import { Exclude } from 'class-transformer';
 import { Tag } from './tag.entity';
@@ -28,7 +29,6 @@ export class User extends BaseTable {
 	nickname: string;
 
 	@Column({
-		type: 'enum',
 		enum: EUserColor,
 		nullable: true,
 	})
@@ -38,11 +38,16 @@ export class User extends BaseTable {
 	isVerified: boolean;
 
 	@Column({
-		type: 'enum',
 		enum: ELoginType,
 		default: ELoginType.LOCAL,
 	})
 	loginType: ELoginType;
+
+	@Column({
+		enum: ERole,
+		default: ERole.USER,
+	})
+	role: ERole;
 
 	@Column({
 		default: 0,

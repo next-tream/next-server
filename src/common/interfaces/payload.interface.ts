@@ -1,5 +1,10 @@
 /** @format */
 
+import { ERole } from '../enums/role.enum';
+
 export interface IPayload {
-	sub: number;
+	id: number;
+	role: ERole;
+	email: string;
+	nickname: string;
 }

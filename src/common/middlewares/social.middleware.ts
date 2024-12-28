@@ -7,7 +7,7 @@ import {
 	NestMiddleware,
 } from '@nestjs/common';
 
-import { ELoginType } from '../enums/loging-type.enum';
+import { ELoginType } from '../enums/login-type.enum';
 import { Request } from 'express';
 
 @Injectable()

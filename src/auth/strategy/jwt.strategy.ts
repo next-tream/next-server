@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	}
 
 	async validate(payload: IJwtPayload) {
-		const user = await this.userRepository.isUUIDAvailable(payload.sub);
+		const user = await this.userRepository.isUUIDAvailable(payload.id);
 
 		if (payload.type !== 'access') throw new BadRequestException('토큰 이상함');
 		if (!user.isVerified) throw new ForbiddenException('이메일 인증 되지 않음');

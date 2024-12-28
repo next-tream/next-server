@@ -49,6 +49,8 @@ export class CodeService {
 	async checkVerifiedUser(email: string) {
 		const user = await this.userRepository.findUserForEmail(email);
 
+		if (!user) throw new BadRequestException('이메일 데이터베이스에 없음');
+
 		if (user.isVerified) throw new ConflictException('이미 인증된 유저입니다');
 	}
 
