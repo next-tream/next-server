@@ -78,6 +78,7 @@ export class AuthController {
 	@ApiOperation({
 		summary: '소셜 로그인',
 	})
+	@DPublic()
 	@Get('login')
 	async loginSocial(
 		@DUser() user: User,

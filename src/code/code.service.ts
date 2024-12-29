@@ -9,7 +9,8 @@ import {
 
 import { CodeRepository } from './code.repository';
 import { CompareCodeDto } from './dto/compare-code.dto';
-import { IEmail } from 'src/common/interfaces/email.interface';
+import { IEmailCode } from 'src/common/interfaces/email-code.interface';
+import { ISendCode } from 'src/common/interfaces/send-code.interface';
 import { MailService } from 'src/mail/mail.service';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { randomInt } from 'crypto';
@@ -22,10 +23,10 @@ export class CodeService {
 		private readonly userRepository: UserRepository,
 	) {}
 
-	async setCode(email: string): Promise<void> {
+	async setCode({ email, reissue }: ISendCode): Promise<void> {
 		const code: number = this.createCodeWithCrypto();
 
-		const emailObject: IEmail = { email, code };
+		const emailObject: IEmailCode = { email, code };
 
 		await this.codeRepository.setCode(emailObject);
 

@@ -25,6 +25,7 @@ import { Module } from '@nestjs/common';
 			inject: [ConfigService],
 		}),
 	],
+
 	providers: [MailService],
 })
 export class MailModule {}

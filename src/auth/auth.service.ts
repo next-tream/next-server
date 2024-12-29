@@ -34,7 +34,7 @@ export class AuthService {
 		const hashPassword: string = await this.bcryptService.transformPassword(password);
 		const color: EUserColor = getRandomUserColor();
 
-		this.codeService.setCode(verifyObject.email);
+		this.codeService.setCode({ email: verifyObject.email, reissue: false });
 
 		return await this.userService.registerUser({
 			...verifyObject,

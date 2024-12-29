@@ -2,14 +2,14 @@
 
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 
-import { IEmail } from '../common/interfaces/email.interface';
+import { IEmailCode } from '../common/interfaces/email-code.interface';
 import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class MailService {
 	constructor(private readonly mailerService: MailerService) {}
 
-	async sendEmailCode({ email, code }: IEmail) {
+	async sendEmailCode({ email, code }: IEmailCode): Promise<void> {
 		try {
 			const result = await this.mailerService.sendMail({
 				to: email,

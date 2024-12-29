@@ -1,7 +1,7 @@
 /** @format */
 
 import { CodeService } from './code.service';
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import { CompareCodeDto } from './dto/compare-code.dto';
 import { EmailDto } from 'src/common/dto/email.dto';
 import { ApiOperation } from '@nestjs/swagger';
@@ -23,12 +23,15 @@ export class CodeController {
 
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
-		summary: '인증 코드 재발급',
+		summary: '인증 코드 발급',
 	})
 	@DPublic()
-	@Post('reissue')
-	async reissueCode(@Body() { email }: EmailDto): Promise<void> {
+	@Post('issue')
+	async issueCode(
+		@Body() { email }: EmailDto,
+		@Query('reissue') reissue: boolean,
+	): Promise<void> {
 		await this.codeService.checkVerifiedUser(email);
-		await this.codeService.setCode(email);
+		await this.codeService.setCode({ email, reissue });
 	}
 }
