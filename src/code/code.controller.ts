@@ -17,8 +17,11 @@ export class CodeController {
 	})
 	@DPublic()
 	@Post()
-	async compareCode(@Body() compareCodeDto: CompareCodeDto): Promise<void> {
-		await this.codeService.compareCode(compareCodeDto);
+	async compareCode(
+		@Body() compareCodeDto: CompareCodeDto,
+		@Query('is_password') is_password: boolean,
+	): Promise<void> {
+		await this.codeService.compareCode(compareCodeDto, is_password);
 	}
 
 	@HttpCode(HttpStatus.OK)
@@ -29,9 +32,9 @@ export class CodeController {
 	@Post('issue')
 	async issueCode(
 		@Body() { email }: EmailDto,
-		@Query('reissue') reissue: boolean,
+		@Query('is_password') is_password: boolean,
 	): Promise<void> {
-		await this.codeService.checkVerifiedUser(email);
-		await this.codeService.setCode({ email, reissue });
+		await this.codeService.checkVerifiedUser({ email, is_password });
+		await this.codeService.setCode({ email, is_password });
 	}
 }

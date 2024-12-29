@@ -1,7 +1,7 @@
 /** @format */
 
-import { IEmail } from './email.interface';
+import { ISendCode } from './send-code.interface';
 
-export interface IEmailCode extends IEmail {
+export interface IEmailCode extends ISendCode {
 	code: number;
 }

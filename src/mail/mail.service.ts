@@ -9,11 +9,11 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class MailService {
 	constructor(private readonly mailerService: MailerService) {}
 
-	async sendEmailCode({ email, code }: IEmailCode): Promise<void> {
+	async sendEmailCode({ email, code, is_password }: IEmailCode): Promise<void> {
 		try {
 			const result = await this.mailerService.sendMail({
 				to: email,
-				subject: 'Nextream에 오신 걸 환영합니다.',
+				subject: is_password ? 'Nextream 비밀번호 변경' : 'Nextream에 오신 걸 환영합니다.',
 				text: `인증번호 6자리는 ${code}입니다.`,
 			});
 

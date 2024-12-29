@@ -7,12 +7,13 @@ import {
 	NotFoundException,
 } from '@nestjs/common';
 
-import { CodeRepository } from './code.repository';
+import { CodeRepository } from './repository/code.repository';
 import { CompareCodeDto } from './dto/compare-code.dto';
 import { IEmailCode } from 'src/common/interfaces/email-code.interface';
 import { ISendCode } from 'src/common/interfaces/send-code.interface';
 import { MailService } from 'src/mail/mail.service';
 import { UserRepository } from 'src/user/repository/user.repository';
+import { cacheRepository } from './repository/cache.repository';
 import { randomInt } from 'crypto';
 
 @Injectable()
@@ -21,14 +22,18 @@ export class CodeService {
 		private readonly mailService: MailService,
 		private readonly codeRepository: CodeRepository,
 		private readonly userRepository: UserRepository,
+		private readonly cacheRepository: cacheRepository,
 	) {}
 
-	async setCode({ email, reissue }: ISendCode): Promise<void> {
+	async setCode({ email, is_password }: ISendCode): Promise<void> {
 		const code: number = this.createCodeWithCrypto();
 
-		const emailObject: IEmailCode = { email, code };
+		const emailObject: IEmailCode = { email, code, is_password };
 
-		await this.codeRepository.setCode(emailObject);
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		is_password
+			? await this.cacheRepository.setCodeToCache(emailObject)
+			: await this.codeRepository.setCode(emailObject);
 
 		this.mailService.sendEmailCode(emailObject);
 	}
@@ -47,27 +52,35 @@ export class CodeService {
 		await this.codeRepository.deleteCode(email);
 	}
 
-	async checkVerifiedUser(email: string) {
+	async checkVerifiedUser({ email, is_password }: ISendCode) {
 		const user = await this.userRepository.findUserForEmail(email);
 
 		if (!user) throw new BadRequestException('이메일 데이터베이스에 없음');
 
-		if (user.isVerified) throw new ConflictException('이미 인증된 유저입니다');
+		if (user.isVerified && !is_password) throw new ConflictException('이미 인증된 유저입니다');
 	}
 
 	createCodeWithCrypto(): number {
 		return randomInt(100000, 1000000);
 	}
 
-	async compareCode({ email, code }: CompareCodeDto): Promise<void> {
-		await this.checkVerifiedUser(email);
+	async compareCode({ email, code }: CompareCodeDto, is_password: boolean): Promise<void> {
+		await this.checkVerifiedUser({ email, is_password });
 
-		const storeCode = await this.getCode(email);
+		const storeCode = is_password
+			? await this.cacheRepository.getCodeToCache(email)
+			: await this.getCode(email);
 
 		if (storeCode !== code) {
+			console.log(storeCode);
+			console.log(code);
 			throw new BadRequestException('인증 코드가 일치하지 않습니다.');
 		}
-		await this.userRepository.verifyUser(email);
-		await this.deleteCode(email);
+		if (is_password) {
+			await this.cacheRepository.deleteCodeToCache(email);
+		} else {
+			await this.userRepository.verifyUser(email);
+			await this.deleteCode(email);
+		}
 	}
 }
