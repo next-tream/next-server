@@ -128,7 +128,7 @@ export class AuthController {
 		return { accessToken };
 	}
 
-	@HttpCode(HttpStatus.OK)
+	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		summary: '로그아웃',
 	})
