@@ -91,7 +91,9 @@ export class AuthService {
 	async changePassword({ email, password }: LoginUserDto): Promise<void> {
 		const user: User = await this.userRepository.findUserForEmail(email);
 
-		user.password = password;
+		const hashPassword = await this.bcryptService.transformPassword(password);
+
+		user.password = hashPassword;
 		await this.userRepository.saveUser(user);
 	}
 

@@ -8,6 +8,7 @@ import {
 	HttpCode,
 	HttpStatus,
 	Post,
+	Put,
 	Query,
 	Res,
 	Session,
@@ -61,10 +62,9 @@ export class AuthController {
 			nickname,
 		});
 
-		const userId = id;
-		session[userId] = { refreshToken };
+		session[id] = { refreshToken };
 
-		res.cookie('sessionId', userId, {
+		res.cookie('sessionId', id, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'prod',
 			sameSite: 'none',
@@ -105,7 +105,7 @@ export class AuthController {
 		summary: '비밀번호 변경',
 	})
 	@DPublic()
-	@Post('change/password')
+	@Put('change/password')
 	changePassword(@Body() body: LoginUserDto): Promise<void> {
 		return this.authService.changePassword(body);
 	}
