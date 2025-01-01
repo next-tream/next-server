@@ -15,7 +15,7 @@ export class cacheRepository {
 
 	async getCodeToCache(email: string): Promise<string> {
 		const data = await this.cacheManager.get(email);
-		console.log(data);
+
 		return data as string;
 	}
 
