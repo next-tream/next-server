@@ -72,8 +72,6 @@ export class CodeService {
 			: await this.getCode(email);
 
 		if (storeCode !== code) {
-			console.log(storeCode);
-			console.log(code);
 			throw new BadRequestException('인증 코드가 일치하지 않습니다.');
 		}
 		if (is_password) {
