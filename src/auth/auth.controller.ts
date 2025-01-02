@@ -95,6 +95,7 @@ export class AuthController {
 			secure: process.env.NODE_ENV === 'prod',
 			sameSite: 'none',
 			maxAge: 604800000,
+			domain: process.env.SUB_DOMAIN,
 		});
 
 		return { accessToken };
