@@ -53,19 +53,17 @@ export class AuthService {
 	async loginSocial({ email, ...rest }: User): Promise<ISocial> {
 		let user: User | null = await this.userRepository.findUserForEmail(email, true);
 
-		if (user) {
-			throw new BadRequestException('이미 등록된 유저입니다.');
+		if (!user) {
+			const color: EUserColor = getRandomUserColor();
+
+			user = await this.userService.registerUser({
+				...rest,
+				color,
+				email,
+				isVerified: true,
+				loginType: rest.loginType,
+			});
 		}
-
-		const color: EUserColor = getRandomUserColor();
-
-		user = await this.userService.registerUser({
-			...rest,
-			color,
-			email,
-			isVerified: true,
-			loginType: rest.loginType,
-		});
 
 		const token = await this.login({
 			id: user.id,
