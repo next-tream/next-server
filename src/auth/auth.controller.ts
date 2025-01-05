@@ -50,7 +50,7 @@ export class AuthController {
 	@DPublic()
 	@Post('login')
 	async login(
-		@DUser() { id, role, email, nickname }: User,
+		@DUser() { id, role, email, nickname, color }: User,
 		@Body() loginUserDto: LoginUserDto,
 		@Res({ passthrough: true }) res: Response,
 		@Session() session: Record<string, any>,
@@ -60,6 +60,7 @@ export class AuthController {
 			role,
 			email,
 			nickname,
+			color,
 		});
 
 		session[id] = { refreshToken };
@@ -118,12 +119,15 @@ export class AuthController {
 	@UseGuards(RefreshTokenGuard)
 	@DPublic()
 	@Post('reissue')
-	async reissueAccessToken(@DUser() { id, role, email, nickname }: User): Promise<IAccessToken> {
+	async reissueAccessToken(
+		@DUser() { id, role, email, nickname, color }: User,
+	): Promise<IAccessToken> {
 		const accessToken = await this.authService.generateAccessToken({
 			id,
 			role,
 			email,
 			nickname,
+			color,
 		});
 
 		return { accessToken };

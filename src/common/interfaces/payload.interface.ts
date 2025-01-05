@@ -7,4 +7,5 @@ export interface IPayload {
 	role: ERole;
 	email: string;
 	nickname: string;
+	color: string;
 }

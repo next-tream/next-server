@@ -70,6 +70,7 @@ export class AuthService {
 			email: user.email,
 			role: user.role,
 			nickname: user.nickname,
+			color: user.color,
 		});
 
 		return { ...token, id: user.id };
