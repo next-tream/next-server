@@ -3,16 +3,26 @@
 import {
 	ConnectedSocket,
 	MessageBody,
+	OnGatewayConnection,
+	OnGatewayDisconnect,
 	SubscribeMessage,
 	WebSocketGateway,
 } from '@nestjs/websockets';
 
 import { ChatService } from './chat.service';
-import { Socket } from 'dgram';
+import { Socket } from 'socket.io';
 
 @WebSocketGateway()
-export class ChatGateway {
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	constructor(private readonly chatService: ChatService) {}
+
+	handleConnection(client: Socket) {
+		// console.log(client.handshake.headers.authorization);
+	}
+
+	handleDisconnect(client: Socket) {
+		return;
+	}
 
 	@SubscribeMessage('receive')
 	async receiveMessage(
@@ -20,13 +30,9 @@ export class ChatGateway {
 		@ConnectedSocket() client: Socket,
 	) {
 		console.log('receive');
-		console.log('data', data);
-		console.log('client', client);
 	}
 	@SubscribeMessage('send')
 	async sendMessage(@MessageBody() data: { message: string }, @ConnectedSocket() client: Socket) {
 		console.log('send');
-
-		client.emit('receive', { ...data, from: 'server' });
 	}
 }
