@@ -15,6 +15,7 @@ import { SocialMiddleware } from './common/middlewares/social.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { validationSchema } from './common/configs/validation.schema';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
 	imports: [
@@ -38,6 +39,7 @@ import { validationSchema } from './common/configs/validation.schema';
 		CodeModule,
 		BcryptModule,
 		MailModule,
+		ChatModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
