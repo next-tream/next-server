@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { Room } from './entity/room.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
 	imports: [
@@ -23,6 +24,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 			}),
 			inject: [ConfigService],
 		}),
+		UserModule,
 	],
 	providers: [ChatGateway, ChatService],
 })
