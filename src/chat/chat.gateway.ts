@@ -25,6 +25,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 		if (!token) {
 			client.emit('error', {
+				statusCode: 400,
 				message: '토큰 주세요',
 			});
 			client.disconnect();
