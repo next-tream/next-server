@@ -18,6 +18,7 @@ async function bootstrap() {
 
 	app.enableCors({
 		origin: ['https://nextream.store', 'http://localhost:3000'],
+		methods: ['*'],
 		credentials: true,
 	});
 
