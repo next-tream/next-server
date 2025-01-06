@@ -7,7 +7,6 @@ import {
 	OnGatewayDisconnect,
 	SubscribeMessage,
 	WebSocketGateway,
-	WsException,
 } from '@nestjs/websockets';
 
 import { ChatService } from './chat.service';
@@ -21,7 +20,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		const token = client.handshake.headers.authorization?.split(' ')[1];
 
 		if (!token) {
-			client.emit('error', '토큰 없음 ㅋ');
+			client.emit('error', '토큰 없음');
 			client.disconnect();
 		} else {
 			this.chatService.handleConnect(token, client);

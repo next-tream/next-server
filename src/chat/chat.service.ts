@@ -5,7 +5,6 @@ import { IJwtPayload } from 'src/common/interfaces/jwt-payload.interface';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Socket } from 'socket.io';
-import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class ChatService {
@@ -24,7 +23,7 @@ export class ChatService {
 		try {
 			const payload: IJwtPayload = await this.jwtService.verifyAsync(token);
 			if (payload.role !== ERole.STREAMER) {
-				client.emit('error', '스트리머가 아님 ㅋ');
+				client.emit('error', '스트리머 아님 ㅋㅋ');
 				client.disconnect();
 			}
 			client.data.user = payload;
@@ -34,8 +33,7 @@ export class ChatService {
 		} catch (error: any) {
 			console.log(error.message);
 
-			client.emit('error', '토큰 이상 ㅋ');
-			client.disconnect();
+			client.emit('error', '토큰 이상함');
 		}
 	}
 }
