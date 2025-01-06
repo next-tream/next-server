@@ -7,6 +7,7 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { JwtGuard } from './common/guards/jwt.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { SocketIoAdapter } from './common/adapter/socket.adapter';
 import { SwaggerConfig } from './common/configs/swagger.config';
 import { SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
@@ -41,6 +42,8 @@ async function bootstrap() {
 	app.setGlobalPrefix('api', {
 		exclude: [{ path: '/', method: RequestMethod.ALL }],
 	});
+
+	app.useWebSocketAdapter(new SocketIoAdapter(app));
 
 	sessionConfig(app);
 
