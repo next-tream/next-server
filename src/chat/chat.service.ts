@@ -27,7 +27,11 @@ export class ChatService {
 		try {
 			const payload: IJwtPayload = await this.jwtService.verifyAsync(token);
 			if (payload.role !== ERole.STREAMER) {
-				client.emit('error', '스트리머 아님 ㅋㅋ');
+				client.emit('check', {
+					type: 'connection',
+					isSuccess: false,
+					message: '스트리머 아님 ㅋ',
+				});
 				client.disconnect();
 			}
 
@@ -36,11 +40,19 @@ export class ChatService {
 			client.data.user = user;
 
 			this.registerClient(payload.id, client);
-			client.emit('success', '최초 연결 성공 ㅋ');
+			client.emit('check', {
+				type: 'connection',
+				isSuccess: true,
+				message: '성공 풉킥',
+			});
 		} catch (error: any) {
 			console.log(error.message);
 
-			client.emit('error', '토큰 이상함');
+			client.emit('check', {
+				type: 'connection',
+				isSuccess: false,
+				message: '토큰 이상함 ㅋㅋㅋ',
+			});
 			client.disconnect();
 		}
 	}

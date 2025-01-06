@@ -17,7 +17,7 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
 	app.enableCors({
-		origin: ['https://nextream.store', 'http://localhost:3000'],
+		origin: ['https://nextream.store', 'http://localhost:3000', 'http://192.168.1.100:3000'],
 		methods: ['*'],
 		credentials: true,
 	});

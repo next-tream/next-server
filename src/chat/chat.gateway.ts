@@ -20,7 +20,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		const token = client.handshake.headers.authorization?.split(' ')[1];
 
 		if (!token) {
-			client.emit('error', '토큰 없음');
+			client.emit('check', {
+				type: 'connection',
+				isSuccess: false,
+				message: '토큰 없음 ㅋ',
+			});
 			client.disconnect();
 		} else {
 			this.chatService.handleConnect(token, client);
