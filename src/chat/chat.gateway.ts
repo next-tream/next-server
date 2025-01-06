@@ -7,27 +7,21 @@ import {
 	OnGatewayDisconnect,
 	SubscribeMessage,
 	WebSocketGateway,
+	WsException,
 } from '@nestjs/websockets';
 
 import { ChatService } from './chat.service';
 import { Socket } from 'socket.io';
-import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-	constructor(
-		private readonly chatService: ChatService,
-		private readonly jwtService: JwtService,
-	) {}
+	constructor(private readonly chatService: ChatService) {}
 
 	handleConnection(client: Socket) {
 		const token = client.handshake.headers.authorization?.split(' ')[1];
 
 		if (!token) {
-			client.emit('error', {
-				statusCode: 400,
-				message: '토큰 주세요',
-			});
+			client.emit('error', '토큰 없음 ㅋ');
 			client.disconnect();
 		} else {
 			this.chatService.handleConnect(token, client);
