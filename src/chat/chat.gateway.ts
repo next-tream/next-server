@@ -20,23 +20,25 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		private readonly jwtService: JwtService,
 	) {}
 
-	async handleConnection(client: Socket) {
+	handleConnection(client: Socket) {
 		const token = client.handshake.headers.authorization?.split(' ')[1];
 
 		if (!token) {
+			client.emit('error', {
+				message: '토큰 주세요',
+			});
 			client.disconnect();
-		}
-		try {
-			const payload = await this.jwtService.verifyAsync(token);
-			client.data.user = payload;
-		} catch (error) {
-			console.log(error.message);
-			client.disconnect();
+		} else {
+			this.chatService.handleConnect(token, client);
 		}
 	}
 
 	handleDisconnect(client: Socket) {
-		return;
+		const user = client.data.user;
+
+		if (user) {
+			this.chatService.deleteClient(user.id);
+		}
 	}
 
 	@SubscribeMessage('receive')
