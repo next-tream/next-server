@@ -22,12 +22,12 @@ export class ChatService {
 	async handleConnect(token: string, client: Socket) {
 		try {
 			const payload: IJwtPayload = await this.jwtService.verifyAsync(token);
-			if (payload.role !== ERole.STREAMER) {
-				client.emit('error', {
-					statusCode: 401,
-					message: 'role이 스트리머가 아님',
-				});
-			}
+			// if (payload.role !== ERole.STREAMER) {
+			// 	client.emit('error', {
+			// 		statusCode: 401,
+			// 		message: 'role이 스트리머가 아님',
+			// 	});
+			// }
 			client.data.user = payload;
 
 			this.registerClient(payload.id, client);
