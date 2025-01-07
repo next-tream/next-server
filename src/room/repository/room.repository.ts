@@ -28,6 +28,6 @@ export class RoomRepository {
 		if (!room) {
 			throw new InternalServerErrorException('방 생성 못함');
 		}
-		return { roomId: room._id.toString() };
+		return { roomId: room.roomId };
 	}
 }

@@ -10,6 +10,10 @@ export class Room {
 	@ApiProperty({ description: 'MongoDB ObjectId', type: String })
 	_id: ObjectId;
 
+	get roomId(): string {
+		return this._id.toString();
+	}
+
 	@Column()
 	name: string;
 
