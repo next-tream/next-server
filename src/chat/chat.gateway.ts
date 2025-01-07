@@ -1,16 +1,29 @@
 /** @format */
 
-import { OnGatewayConnection, OnGatewayDisconnect, WebSocketGateway } from '@nestjs/websockets';
+import {
+	OnGatewayConnection,
+	OnGatewayDisconnect,
+	OnGatewayInit,
+	WebSocketGateway,
+} from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
 
 import { ChatService } from './chat.service';
-import { Socket } from 'socket.io';
 import { UseFilters } from '@nestjs/common';
 import { WsExceptionFilter } from 'src/common/filters/ws-exception.filter';
 
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway()
-export class ChatGateway implements OnGatewayConnection<Socket>, OnGatewayDisconnect {
+export class ChatGateway
+	implements OnGatewayConnection<Socket>, OnGatewayDisconnect<Socket>, OnGatewayInit<Server>
+{
+	private server: Server;
+
 	constructor(private readonly chatService: ChatService) {}
+
+	afterInit(server: Server) {
+		this.server = server;
+	}
 
 	handleConnection(client: Socket) {
 		console.log(client);
