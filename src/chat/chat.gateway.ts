@@ -32,4 +32,6 @@ export class ChatGateway
 	handleDisconnect(client: Socket) {
 		console.log(client);
 	}
+
+	joinRoom() {}
 }

@@ -40,11 +40,11 @@ export class RefreshTokenGuard implements CanActivate {
 			secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
 		});
 
-		if (!payload || payload.type == 'refresh') {
+		if (!payload || payload.type !== 'refresh') {
 			throw new ForbiddenException('refreshToken이 이상합니다.');
 		}
 
-		request.id = { sub: payload.id };
+		request.user = payload;
 		return true;
 	}
 }
