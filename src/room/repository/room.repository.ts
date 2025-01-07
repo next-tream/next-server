@@ -5,8 +5,10 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { MongoRepository } from 'typeorm';
+import { ObjectId } from 'mongodb';
 import { Room } from '../entity/room.entity';
 import { ICreateRoom, IRoom, IRoomId } from 'src/common/interfaces/room.interface';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class RoomRepository {
@@ -29,5 +31,15 @@ export class RoomRepository {
 			throw new InternalServerErrorException('방 생성 못함');
 		}
 		return { roomId: room.roomId };
+	}
+
+	async validateRoom(roomId: string) {
+		const room = await this.roomRepository.findOne({
+			where: { _id: new ObjectId(roomId) },
+		});
+
+		if (!room) {
+			throw new WsException({ message: '룸 이상함!' });
+		}
 	}
 }

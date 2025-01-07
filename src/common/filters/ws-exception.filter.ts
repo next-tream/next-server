@@ -1,13 +1,18 @@
 /** @format */
 
-import { ArgumentsHost, Catch, HttpException } from '@nestjs/common';
+import { ArgumentsHost, Catch } from '@nestjs/common';
+import { BaseWsExceptionFilter, WsException } from '@nestjs/websockets';
 
-import { BaseWsExceptionFilter } from '@nestjs/websockets';
+import { Socket } from 'socket.io';
 
-@Catch(HttpException)
-export class WsExceptionFilter extends BaseWsExceptionFilter<HttpException> {
-	catch(exception: HttpException, host: ArgumentsHost) {
-		const socket = host.switchToWs().getClient();
-		socket.emit('error', { data: exception.getResponse() });
+@Catch(WsException) // WsException을 명시적으로 처리
+export class WsExceptionFilter extends BaseWsExceptionFilter<WsException> {
+	catch(exception: WsException, host: ArgumentsHost) {
+		const client = host.switchToWs().getClient<Socket>();
+		const errorResponse = exception.getError();
+
+		client.emit('error', {
+			message: typeof errorResponse === 'string' ? errorResponse : errorResponse.message,
+		});
 	}
 }

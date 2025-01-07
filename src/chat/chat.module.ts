@@ -8,6 +8,7 @@ import { ChatRepository } from './repository/chat.repository';
 import { ChatService } from './chat.service';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
+import { RoomModule } from 'src/room/room.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
 
@@ -25,6 +26,7 @@ import { UserModule } from 'src/user/user.module';
 			inject: [ConfigService],
 		}),
 		UserModule,
+		RoomModule,
 	],
 
 	providers: [ChatGateway, ChatService, ChatRepository],

@@ -7,5 +7,5 @@ import { Injectable } from '@nestjs/common';
 export class ChatService {
 	constructor(private readonly chatRepository: ChatRepository) {}
 
-	createRoom() {}
+	joinRoom() {}
 }

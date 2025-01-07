@@ -11,5 +11,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 	imports: [TypeOrmModule.forFeature([Room], 'mongo')],
 	controllers: [RoomController],
 	providers: [RoomService, RoomRepository],
+	exports: [RoomRepository],
 })
 export class RoomModule {}
