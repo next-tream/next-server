@@ -8,7 +8,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class Room {
 	@ObjectIdColumn()
 	@ApiProperty({ description: 'MongoDB ObjectId', type: String })
-	id: ObjectId;
+	_id: ObjectId;
 
 	@Column()
 	name: string;
@@ -21,6 +21,9 @@ export class Room {
 
 	@Column()
 	participants: number[];
+
+	@Column()
+	isLive: boolean;
 
 	@CreateDateColumn()
 	createdAt: Date;

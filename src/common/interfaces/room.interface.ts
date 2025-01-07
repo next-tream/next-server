@@ -9,3 +9,7 @@ export class IRoom {
 export class ICreateRoom extends IRoom {
 	participants: number[];
 }
+
+export class IRoomId {
+	roomId: string;
+}
