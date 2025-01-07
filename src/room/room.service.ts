@@ -1,14 +1,18 @@
 /** @format */
 
-import { CreateRoomDto } from '../room/dto/create-room.dto';
+import { ICreateRoom, IRoom } from 'src/common/interfaces/room.interface';
+
 import { Injectable } from '@nestjs/common';
+import { Room } from './entity/room.entity';
 import { RoomRepository } from './repository/room.repository';
 
 @Injectable()
 export class RoomService {
 	constructor(private readonly roomRepository: RoomRepository) {}
 
-	createRoom({ name, tags }: CreateRoomDto, streamerId: number) {
-		console.log(name, tags, streamerId);
+	async createRoom(room: IRoom): Promise<Room> {
+		const roomObject: ICreateRoom = this.roomRepository.createRoom(room);
+
+		return await this.roomRepository.saveRoom(roomObject);
 	}
 }

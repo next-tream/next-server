@@ -9,6 +9,7 @@ import { DRoles } from 'src/common/decorators/roles.decorator';
 import { ERole } from 'src/common/enums/role.enum';
 import { DUser } from 'src/common/decorators/user.decorator';
 import { User } from 'src/user/entity/user.entity';
+import { Room } from './entity/room.entity';
 
 @Controller('room')
 export class RoomController {
@@ -17,7 +18,7 @@ export class RoomController {
 	@Post()
 	@DRoles(ERole.STREAMER)
 	@UseGuards(JwtGuard, RolesGuard)
-	postRoom(@Body() createRoomDto: CreateRoomDto, @DUser() { id }: User) {
-		return this.roomService.createRoom(createRoomDto, id);
+	postRoom(@Body() createRoomDto: CreateRoomDto, @DUser() { id }: User): Promise<Room> {
+		return this.roomService.createRoom({ ...createRoomDto, streamerId: id });
 	}
 }

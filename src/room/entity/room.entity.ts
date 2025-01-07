@@ -2,23 +2,25 @@
 
 import { Column, CreateDateColumn, Entity, ObjectId, ObjectIdColumn } from 'typeorm';
 
-/** @format */
+import { ApiProperty } from '@nestjs/swagger';
+
 @Entity()
 export class Room {
 	@ObjectIdColumn()
+	@ApiProperty({ description: 'MongoDB ObjectId', type: String })
 	id: ObjectId;
 
 	@Column()
 	name: string;
 
 	@Column()
-	streamerId: string;
+	streamerId: number;
 
 	@Column()
 	tags: number[];
 
 	@Column()
-	participants: string[];
+	participants: number[];
 
 	@CreateDateColumn()
 	createdAt: Date;
