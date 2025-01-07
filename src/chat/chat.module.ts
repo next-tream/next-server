@@ -4,10 +4,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { Chat } from './entity/chat.entity';
 import { ChatGateway } from './chat.gateway';
+import { ChatRepository } from './repository/chat.repository';
 import { ChatService } from './chat.service';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { Room } from './entity/room.entity';
+import { RoomRepository } from './repository/room.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
 
@@ -26,6 +28,6 @@ import { UserModule } from 'src/user/user.module';
 		}),
 		UserModule,
 	],
-	providers: [ChatGateway, ChatService],
+	providers: [ChatGateway, ChatService, ChatRepository, RoomRepository],
 })
 export class ChatModule {}

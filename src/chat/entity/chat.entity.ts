@@ -1,10 +1,22 @@
 /** @format */
 
-import { Entity, ObjectId, ObjectIdColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ObjectId, ObjectIdColumn } from 'typeorm';
 
 /** @format */
 @Entity()
 export class Chat {
 	@ObjectIdColumn()
-	_id: ObjectId;
+	id: ObjectId;
+
+	@Column()
+	roomId: string;
+
+	@Column()
+	senderId: string;
+
+	@Column()
+	message: string;
+
+	@CreateDateColumn()
+	sentAt: Date;
 }

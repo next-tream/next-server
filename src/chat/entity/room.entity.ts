@@ -1,10 +1,22 @@
 /** @format */
 
-import { Entity, ObjectId, ObjectIdColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ObjectId, ObjectIdColumn } from 'typeorm';
 
 /** @format */
 @Entity()
 export class Room {
 	@ObjectIdColumn()
-	_id: ObjectId;
+	id: ObjectId;
+
+	@Column()
+	name: string;
+
+	@Column()
+	streamerId: string;
+
+	@Column()
+	participants: string[];
+
+	@CreateDateColumn()
+	createdAt: Date;
 }
