@@ -15,6 +15,9 @@ export class Room {
 	streamerId: string;
 
 	@Column()
+	tags: number[];
+
+	@Column()
 	participants: string[];
 
 	@CreateDateColumn()

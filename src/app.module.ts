@@ -18,6 +18,7 @@ import { UserModule } from './user/user.module';
 import { WinstonLoggerOptions } from './common/logger/winston.logger';
 import { WinstonModule } from 'nest-winston';
 import { validationSchema } from './common/configs/validation.schema';
+import { RoomModule } from './room/room.module';
 
 @Module({
 	imports: [
@@ -43,6 +44,7 @@ import { validationSchema } from './common/configs/validation.schema';
 		BcryptModule,
 		MailModule,
 		ChatModule,
+		RoomModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
