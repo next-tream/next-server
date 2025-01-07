@@ -30,10 +30,6 @@ export class ChatGateway
 	}
 
 	handleDisconnect(client: Socket) {
-		const user = client.data.user;
-
-		if (user) {
-			this.chatService.deleteClient(user.id);
-		}
+		console.log(client);
 	}
 }

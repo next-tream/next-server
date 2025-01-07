@@ -3,7 +3,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
-import { ERole } from '../enums/role.enum';
 import { IJwtPayload } from '../interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { Socket } from 'socket.io';
@@ -31,12 +30,6 @@ export class AuthSocketMiddleware implements NestMiddleware {
 			const payload: IJwtPayload = this.jwtService.verify(token, {
 				secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
 			});
-
-			if (payload.role !== ERole.STREAMER) {
-				next(new Error('스트리머가 아닙니다'));
-				socket.disconnect();
-				return;
-			}
 
 			socket.data.user = payload;
 

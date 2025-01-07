@@ -1,17 +1,15 @@
 /** @format */
 
+import { ChatRepository } from './repository/chat.repository';
 import { Injectable } from '@nestjs/common';
-import { Socket } from 'socket.io';
+import { RoomRepository } from './repository/room.repository';
 
 @Injectable()
 export class ChatService {
-	private readonly connectedcClients = new Map<number, Socket>();
+	constructor(
+		private readonly chatRepository: ChatRepository,
+		private readonly roomRepository: RoomRepository,
+	) {}
 
-	registerClient(userId: number, client: Socket) {
-		this.connectedcClients.set(userId, client);
-	}
-
-	deleteClient(userId: number) {
-		this.connectedcClients.delete(userId);
-	}
+	createRoom() {}
 }
