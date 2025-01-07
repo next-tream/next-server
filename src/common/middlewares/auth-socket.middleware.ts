@@ -17,7 +17,10 @@ export class AuthSocketMiddleware implements NestMiddleware {
 
 	use(socket: Socket, next: (err?: Error) => void) {
 		try {
-			const token = socket.handshake.auth?.token || socket.handshake.query?.token;
+			const token =
+				socket.handshake.auth?.token ||
+				socket.handshake.query?.token ||
+				socket.handshake.headers.authorization.split(' ')[1];
 
 			if (!token) {
 				next(new Error('토큰 없어영'));
