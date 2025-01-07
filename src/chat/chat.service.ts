@@ -23,15 +23,12 @@ export class ChatService {
 		this.connectedcClients.delete(userId);
 	}
 
-	async handleConnect(token: string, client: Socket) {
+	async handleConnect(client: Socket) {
 		try {
-			const payload: IJwtPayload = await this.jwtService.verifyAsync(token);
+			const payload: IJwtPayload = await this.jwtService.verifyAsync(
+				client.handshake.auth.token,
+			);
 			if (payload.role !== ERole.STREAMER) {
-				client.emit('check', {
-					type: 'connection',
-					isSuccess: false,
-					message: '스트리머 아님 ㅋ',
-				});
 				client.disconnect();
 			}
 
@@ -40,19 +37,8 @@ export class ChatService {
 			client.data.user = user;
 
 			this.registerClient(payload.id, client);
-			client.emit('check', {
-				type: 'connection',
-				isSuccess: true,
-				message: '성공 풉킥',
-			});
 		} catch (error: any) {
 			console.log(error.message);
-
-			client.emit('check', {
-				type: 'connection',
-				isSuccess: false,
-				message: '토큰 이상함 ㅋㅋㅋ',
-			});
 			client.disconnect();
 		}
 	}

@@ -10,6 +10,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { SocketIoAdapter } from './common/adapter/socket.adapter';
 import { SwaggerConfig } from './common/configs/swagger.config';
 import { SwaggerModule } from '@nestjs/swagger';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import cookieParser from 'cookie-parser';
 import { sessionConfig } from './common/configs/session.config';
 
@@ -23,6 +24,7 @@ async function bootstrap() {
 	});
 
 	app.use(cookieParser());
+	app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
 	app.useGlobalGuards(new JwtGuard(app.get(Reflector)));
 

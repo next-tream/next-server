@@ -13,22 +13,11 @@ import { ChatService } from './chat.service';
 import { Socket } from 'socket.io';
 
 @WebSocketGateway()
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class ChatGateway implements OnGatewayConnection<Socket>, OnGatewayDisconnect {
 	constructor(private readonly chatService: ChatService) {}
 
 	handleConnection(client: Socket) {
-		const token = client.handshake.headers.authorization?.split(' ')[1];
-
-		if (!token) {
-			client.emit('check', {
-				type: 'connection',
-				isSuccess: false,
-				message: '토큰 없음 ㅋ',
-			});
-			client.disconnect();
-		} else {
-			this.chatService.handleConnect(token, client);
-		}
+		this.chatService.handleConnect(client);
 	}
 
 	handleDisconnect(client: Socket) {

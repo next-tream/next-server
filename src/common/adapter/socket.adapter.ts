@@ -1,8 +1,9 @@
 /** @format */
 
+import { ServerOptions, Socket } from 'socket.io';
+
 import { INestApplication } from '@nestjs/common';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import { ServerOptions } from 'socket.io';
 
 export class SocketIoAdapter extends IoAdapter {
 	constructor(private app: INestApplication) {
@@ -17,6 +18,18 @@ export class SocketIoAdapter extends IoAdapter {
 				methods: ['*'],
 				credentials: true,
 			},
+		});
+
+		server.use((client: Socket, next) => {
+			const token = client.handshake.auth?.token;
+
+			if (!token) {
+				const error = new Error('Unauthorized');
+
+				return next(error);
+			}
+
+			next();
 		});
 		return server;
 	}
