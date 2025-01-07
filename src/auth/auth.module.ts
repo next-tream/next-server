@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { AuthSocketMiddleware } from 'src/common/middlewares/auth-socket.middleware';
 import { BcryptModule } from 'src/bcrypt/bcrypt.module';
 import { CodeModule } from 'src/code/code.module';
 import { JwtModule } from '@nestjs/jwt';
@@ -32,7 +33,7 @@ import { UserModule } from '../user/user.module';
 		ConfigModule,
 	],
 	controllers: [AuthController],
-	providers: [AuthService, LocalStrategy, JwtStrategy],
-	exports: [AuthService],
+	providers: [AuthService, LocalStrategy, JwtStrategy, AuthSocketMiddleware],
+	exports: [AuthService, AuthSocketMiddleware],
 })
 export class AuthModule {}

@@ -2,6 +2,7 @@
 
 import { ServerOptions, Socket } from 'socket.io';
 
+import { AuthSocketMiddleware } from '../middlewares/auth-socket.middleware';
 import { INestApplication } from '@nestjs/common';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 
@@ -14,23 +15,17 @@ export class SocketIoAdapter extends IoAdapter {
 		const server = super.createIOServer(port, {
 			...options,
 			cors: {
-				origin: ['http://localhost:3000', 'https://example.com'],
+				origin: ['http://localhost:3000', 'https://nextream.store'],
 				methods: ['*'],
 				credentials: true,
 			},
 		});
+		const authMiddleware = this.app.get(AuthSocketMiddleware);
 
-		server.use((client: Socket, next) => {
-			const token = client.handshake.auth?.token;
-
-			if (!token) {
-				const error = new Error('Unauthorized');
-
-				return next(error);
-			}
-
-			next();
+		server.use((socket: Socket, next) => {
+			authMiddleware.use(socket, next);
 		});
+
 		return server;
 	}
 }

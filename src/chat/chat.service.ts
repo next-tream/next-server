@@ -1,19 +1,11 @@
 /** @format */
 
-import { ERole } from 'src/common/enums/role.enum';
-import { IJwtPayload } from 'src/common/interfaces/jwt-payload.interface';
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Socket } from 'socket.io';
-import { UserRepository } from 'src/user/repository/user.repository';
 
 @Injectable()
 export class ChatService {
 	private readonly connectedcClients = new Map<number, Socket>();
-	constructor(
-		private readonly jwtService: JwtService,
-		private readonly userRepository: UserRepository,
-	) {}
 
 	registerClient(userId: number, client: Socket) {
 		this.connectedcClients.set(userId, client);
@@ -21,25 +13,5 @@ export class ChatService {
 
 	deleteClient(userId: number) {
 		this.connectedcClients.delete(userId);
-	}
-
-	async handleConnect(client: Socket) {
-		try {
-			const payload: IJwtPayload = await this.jwtService.verifyAsync(
-				client.handshake.auth.token,
-			);
-			if (payload.role !== ERole.STREAMER) {
-				client.disconnect();
-			}
-
-			const user = await this.userRepository.findUserForEmail(payload.email);
-
-			client.data.user = user;
-
-			this.registerClient(payload.id, client);
-		} catch (error: any) {
-			console.log(error.message);
-			client.disconnect();
-		}
 	}
 }
