@@ -6,17 +6,19 @@ import {
 	OnGatewayInit,
 	SubscribeMessage,
 	WebSocketGateway,
+	WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
 import { ChatService } from './chat.service';
-import { UseFilters, UsePipes } from '@nestjs/common';
+import { UseFilters } from '@nestjs/common';
 import { WsExceptionFilter } from 'src/common/filters/ws-exception.filter';
 import { RoomRepository } from 'src/room/repository/room.repository';
 
 @WebSocketGateway()
 // implements OnGatewayConnection<Socket>, OnGatewayDisconnect<Socket>, OnGatewayInit<Server>
 export class ChatGateway implements OnGatewayInit<Server> {
+	@WebSocketServer()
 	private server: Server;
 
 	constructor(
@@ -33,7 +35,6 @@ export class ChatGateway implements OnGatewayInit<Server> {
 	// handleDisconnect(client: Socket) {}
 
 	@SubscribeMessage('join')
-	@UsePipes()
 	@UseFilters(WsExceptionFilter)
 	async joinRoom(@MessageBody('roomId') roomId: string, @ConnectedSocket() client: Socket) {
 		await this.roomRepository.validateRoom(roomId);
