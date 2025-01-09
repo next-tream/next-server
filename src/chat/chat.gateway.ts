@@ -16,6 +16,7 @@ import { ChatService } from './chat.service';
 import { Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { WsExceptionFilter } from 'src/common/filters/ws-exception.filter';
 import { RoomRepository } from 'src/room/repository/room.repository';
+import { Room } from 'src/room/entity/room.entity';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class ChatGateway
@@ -52,13 +53,27 @@ export class ChatGateway
 		}),
 	)
 	async joinRoom(@MessageBody('roomId') roomId: string, @ConnectedSocket() client: Socket) {
-		await this.roomRepository.validateRoom(roomId);
-		client.join(roomId);
-
-		const userCount = this.server.sockets.adapter.rooms.get(roomId)?.size || 0;
-
+		const room: Room = await this.roomRepository.validateRoom(roomId);
 		const payload = client.data.user;
+
+		const userCount: number = await this.roomRepository.joinRoom({
+			userId: payload.id,
+			room,
+		});
+
+		client.join(roomId);
 
 		this.server.to(roomId).emit('chat', { payload, userCount });
 	}
+
+	@SubscribeMessage('chat')
+	@UseFilters(WsExceptionFilter)
+	@UsePipes(
+		new ValidationPipe({
+			transform: true,
+			whitelist: true,
+			forbidNonWhitelisted: true,
+		}),
+	)
+	async chatRoom(@MessageBody('chat') chat: string, @ConnectedSocket() client: Socket) {}
 }

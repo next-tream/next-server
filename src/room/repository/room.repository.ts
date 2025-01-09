@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Room } from '../entity/room.entity';
-import { ICreateRoom, IRoom, IRoomId } from 'src/common/interfaces/room.interface';
+import { ICreateRoom, IJoinRoom, IRoom, IRoomId } from 'src/common/interfaces/room.interface';
 import { WsException } from '@nestjs/websockets';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class RoomRepository {
 		return { roomId: room.roomId };
 	}
 
-	async validateRoom(roomId: string) {
+	async validateRoom(roomId: string): Promise<Room> {
 		const room = await this.roomRepository.findOne({
 			where: { _id: new ObjectId(roomId) },
 		});
@@ -41,5 +41,22 @@ export class RoomRepository {
 		if (!room) {
 			throw new WsException({ message: '룸 이상함!' });
 		}
+
+		return room;
+	}
+
+	async joinRoom({ userId, room }: IJoinRoom): Promise<number> {
+		if (room.participants.includes(userId)) {
+			throw new WsException({ message: '이미 방에 존재함' });
+		}
+
+		room.participants.push(userId);
+
+		const joinRoom = await this.roomRepository.save(room);
+
+		if (!joinRoom) {
+			throw new WsException({ message: '룸 이상함!' });
+		}
+		return room.participants.length;
 	}
 }
