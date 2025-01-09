@@ -59,4 +59,15 @@ export class RoomRepository {
 		}
 		return room.participants.length;
 	}
+
+	async leaveRoom({ userId, room }: IJoinRoom): Promise<number> {
+		room.participants = room.participants.filter((id) => id !== userId);
+
+		const leaveRoom = await this.roomRepository.save(room);
+
+		if (!leaveRoom) {
+			throw new WsException({ message: '룸 이상함!' });
+		}
+		return room.participants.length;
+	}
 }
