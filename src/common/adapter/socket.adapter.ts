@@ -1,12 +1,13 @@
 /** @format */
 
+import { INestApplication, Logger } from '@nestjs/common';
 import { ServerOptions, Socket } from 'socket.io';
 
 import { AuthSocketMiddleware } from '../middlewares/auth-socket.middleware';
-import { INestApplication } from '@nestjs/common';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 
 export class SocketIoAdapter extends IoAdapter {
+	private readonly logger = new Logger(SocketIoAdapter.name);
 	constructor(private app: INestApplication) {
 		super(app);
 	}
