@@ -26,7 +26,7 @@ export class RoomController {
 	@ApiResponse({
 		status: 201,
 		description: '방 생성 성공',
-		type: IRoomId,
+		type: String,
 		examples: {
 			success: {
 				summary: '방 생성 성공 예제',

@@ -28,7 +28,6 @@ import { UserModule } from 'src/user/user.module';
 		UserModule,
 		RoomModule,
 	],
-
 	providers: [ChatGateway, ChatService, ChatRepository],
 })
 export class ChatModule {}

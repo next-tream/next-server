@@ -27,9 +27,11 @@ export class RoomRepository {
 
 	async saveRoom(createRoom: ICreateRoom): Promise<IRoomId> {
 		const room = await this.roomRepository.save(createRoom);
+
 		if (!room) {
 			throw new InternalServerErrorException('방 생성 못함');
 		}
+
 		return { roomId: room.roomId };
 	}
 
@@ -47,7 +49,7 @@ export class RoomRepository {
 
 	async joinRoom({ userId, room }: IJoinRoom): Promise<number> {
 		if (room.participants.includes(userId)) {
-			throw new WsException({ message: '이미 방에 존재함' });
+			throw new WsException({ message: `${userId}가 이미 방에 존재함` });
 		}
 
 		room.participants.push(userId);
