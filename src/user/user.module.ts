@@ -13,6 +13,6 @@ import { UserService } from './user.service';
 	imports: [TypeOrmModule.forFeature([User, Tag], 'postgres')],
 	controllers: [UserController],
 	providers: [UserService, UserRepository, TagRepository],
-	exports: [UserService, UserRepository],
+	exports: [UserService, UserRepository, TagRepository],
 })
 export class UserModule {}

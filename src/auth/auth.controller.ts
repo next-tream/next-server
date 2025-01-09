@@ -7,6 +7,7 @@ import {
 	Get,
 	HttpCode,
 	HttpStatus,
+	Logger,
 	Post,
 	Put,
 	Query,
@@ -27,10 +28,16 @@ import { DUser } from 'src/common/decorators/user.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/user/entity/user.entity';
 import { DPublic } from 'src/common/decorators/pubilc.decorator';
+import { TagRepository } from 'src/user/repository/tag.repository';
+import { ILoginResponse } from 'src/common/interfaces/login-response.interface';
 
 @Controller('auth')
 export class AuthController {
-	constructor(private readonly authService: AuthService) {}
+	private logger = new Logger(AuthController.name);
+	constructor(
+		private readonly authService: AuthService,
+		private readonly tagRepository: TagRepository,
+	) {}
 
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({
@@ -50,11 +57,11 @@ export class AuthController {
 	@DPublic()
 	@Post('login')
 	async login(
-		@DUser() { id, role, email, nickname, color }: User,
+		@DUser() { id, role, email, nickname, color, tags }: User,
 		@Body() loginUserDto: LoginUserDto,
 		@Res({ passthrough: true }) res: Response,
 		@Session() session: Record<string, any>,
-	): Promise<IAccessToken> {
+	): Promise<ILoginResponse> {
 		const { accessToken, refreshToken }: IToken = await this.authService.login({
 			id,
 			role,
@@ -72,7 +79,7 @@ export class AuthController {
 			maxAge: 604800000,
 		});
 
-		return { accessToken };
+		return { accessToken, isTag: tags.length !== 0 };
 	}
 
 	@HttpCode(HttpStatus.CREATED)
@@ -86,7 +93,7 @@ export class AuthController {
 		@Query('social') social: string,
 		@Res({ passthrough: true }) res: Response,
 		@Session() session: Record<string, any>,
-	) {
+	): Promise<ILoginResponse> {
 		const { accessToken, refreshToken, id } = await this.authService.loginSocial(user);
 
 		session[id] = { refreshToken };
@@ -99,7 +106,7 @@ export class AuthController {
 			domain: process.env.SUB_DOMAIN,
 		});
 
-		return { accessToken };
+		return { accessToken, isTag: user.tags.length !== 0 };
 	}
 
 	@HttpCode(HttpStatus.OK)
