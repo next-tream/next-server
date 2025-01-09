@@ -16,6 +16,7 @@ import { ChatService } from './chat.service';
 import { Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { WsExceptionFilter } from 'src/common/filters/ws-exception.filter';
 import { RoomService } from 'src/room/room.service';
+import { RoomDto } from './dto/room.dto';
 
 @UseFilters(WsExceptionFilter)
 @UsePipes(
@@ -52,7 +53,7 @@ export class ChatGateway
 
 	@SubscribeMessage('join')
 	async joinRoom(
-		@MessageBody('roomId') roomId: string,
+		@MessageBody() { roomId }: RoomDto,
 		@ConnectedSocket() client: Socket,
 	): Promise<void> {
 		const { userCount, payload } = await this.roomService.joinAndLeaveRoom({
@@ -75,7 +76,7 @@ export class ChatGateway
 
 	@SubscribeMessage('leave')
 	async leaveRoom(
-		@MessageBody('roomId') roomId: string,
+		@MessageBody() { roomId }: RoomDto,
 		@ConnectedSocket() client: Socket,
 	): Promise<void> {
 		const { userCount, payload } = await this.roomService.joinAndLeaveRoom({
