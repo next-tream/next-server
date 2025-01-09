@@ -1,6 +1,11 @@
 /** @format */
 
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+	ConflictException,
+	Injectable,
+	InternalServerErrorException,
+	NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entity/user.entity';
 import { Repository } from 'typeorm';
@@ -70,6 +75,14 @@ export class UserRepository {
 	}
 
 	async saveUser(user: User): Promise<User> {
-		return await this.userRepository.save(user);
+		const saveUser = await this.userRepository.save(user);
+
+		if (!saveUser) {
+			throw new InternalServerErrorException(
+				'성공적으로 데이터베이스에 저장하지 못했습니다.',
+			);
+		}
+
+		return saveUser;
 	}
 }
