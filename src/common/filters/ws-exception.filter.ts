@@ -9,10 +9,10 @@ import { Socket } from 'socket.io';
 export class WsExceptionFilter extends BaseWsExceptionFilter<WsException> {
 	catch(exception: WsException, host: ArgumentsHost) {
 		const client = host.switchToWs().getClient<Socket>();
-		const errorResponse = exception.getError();
+		const message = exception.getError();
 
 		client.emit('error', {
-			message: typeof errorResponse === 'string' ? errorResponse : errorResponse.message,
+			message,
 		});
 	}
 }
