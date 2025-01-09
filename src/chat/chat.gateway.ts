@@ -64,7 +64,7 @@ export class ChatGateway
 		client.join(roomId);
 
 		this.server.to(roomId).emit('chat', {
-			message: `${payload.nickname}님이 입장했습니다.`,
+			message: `${payload.nickname} 님이 입장했습니다.`,
 			payload,
 			userCount,
 		});
