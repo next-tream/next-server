@@ -1,6 +1,6 @@
 /** @format */
 
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { CreateRoomDto } from '../room/dto/create-room.dto';
 import { RoomService } from './room.service';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
@@ -21,7 +21,7 @@ export class RoomController {
 	@DRoles(ERole.STREAMER)
 	@UseGuards(JwtGuard, RolesGuard)
 	@ApiOperation({
-		summary: '방 생성',
+		summary: '방송 시작',
 	})
 	@ApiResponse({
 		status: 201,
@@ -38,5 +38,27 @@ export class RoomController {
 	})
 	postRoom(@Body() createRoomDto: CreateRoomDto, @DUser() { id }: User): Promise<IRoomId> {
 		return this.roomService.createRoom({ ...createRoomDto, streamerId: id });
+	}
+
+	@Delete()
+	@HttpCode(HttpStatus.NO_CONTENT)
+	@DRoles(ERole.STREAMER)
+	@UseGuards(JwtGuard, RolesGuard)
+	@ApiOperation({
+		summary: '방송 종료',
+	})
+	@ApiResponse({
+		status: 204,
+		description: '방송 종료',
+		type: String,
+		examples: {
+			success: {
+				summary: '방송 종료',
+				value: {},
+			},
+		},
+	})
+	deleteRoom(@Body() { roomId }: IRoomId, @DUser() { id }: User): Promise<void> {
+		return this.roomService.endRoom({ roomId, streamerId: id });
 	}
 }
