@@ -22,7 +22,8 @@ export class ChatRepository {
 	}
 
 	async saveChat(chat: IChat): Promise<Chat> {
-		const saveChat = this.chatRepository.save(chat);
+		const saveChat = await this.chatRepository.save(chat);
+
 		if (!saveChat) {
 			throw new WsException('채팅이 정상적으로 저장되지 않았습니다.');
 		}

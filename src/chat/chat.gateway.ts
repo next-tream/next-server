@@ -24,7 +24,7 @@ import { MessageDto } from './dto/message.dto';
 	new ValidationPipe({
 		transform: true,
 		whitelist: true,
-		forbidNonWhitelisted: true,
+		forbidNonWhitelisted: false,
 	}),
 )
 @WebSocketGateway({ cors: { origin: '*' } })
@@ -45,11 +45,11 @@ export class ChatGateway
 	}
 
 	handleConnection(client: Socket) {
-		this.logger.log(client.id);
+		this.logger.log(`handle connection socket: ${client.id}`);
 	}
 
 	handleDisconnect(client: Socket) {
-		this.logger.log(client.id);
+		this.logger.log(`handle disconection socket: ${client.id}`);
 	}
 
 	@SubscribeMessage('join')
@@ -81,8 +81,9 @@ export class ChatGateway
 
 		await this.chatService.saveChat({ roomId, senderId: payload.id, message });
 
-		this.server.to(roomId).emit('chat', {
+		this.server.in(roomId).emit('chat', {
 			message,
+			payload,
 		});
 	}
 
