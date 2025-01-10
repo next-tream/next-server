@@ -1,7 +1,9 @@
 /** @format */
 
+import { BadRequestException, Injectable } from '@nestjs/common';
 import {
 	ICreateRoom,
+	IEndRood,
 	IJoinSocket,
 	IRoom,
 	IRoomId,
@@ -9,7 +11,6 @@ import {
 } from 'src/common/interfaces/room.interface';
 
 import { IJwtPayload } from 'src/common/interfaces/jwt-payload.interface';
-import { Injectable } from '@nestjs/common';
 import { Room } from './entity/room.entity';
 import { RoomRepository } from './repository/room.repository';
 
@@ -20,7 +21,20 @@ export class RoomService {
 	async createRoom(room: IRoom): Promise<IRoomId> {
 		const roomObject: ICreateRoom = this.roomRepository.createRoom(room);
 
-		return await this.roomRepository.saveRoom(roomObject);
+		const saveRoom = await this.roomRepository.saveRoom(roomObject);
+		return { roomId: saveRoom.roomId };
+	}
+
+	async endRoom({ roomId, streamerId }: IEndRood): Promise<void> {
+		const room = await this.roomRepository.validateRoom(roomId);
+
+		if (room.streamerId !== streamerId) {
+			throw new BadRequestException('해당 스트리머가 방을 생성하지 않았습니다.');
+		}
+
+		room.isLive = false;
+
+		await this.roomRepository.saveRoom(room);
 	}
 
 	async joinAndLeaveRoom({

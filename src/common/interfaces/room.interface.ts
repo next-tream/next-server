@@ -12,6 +12,10 @@ export interface IRoomId {
 	roomId: string;
 }
 
+export interface IEndRood extends IRoomId {
+	streamerId: number;
+}
+
 export interface ISocket extends IRoomId {
 	client: Socket;
 }

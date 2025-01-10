@@ -32,7 +32,7 @@ export class RoomRepository {
 			throw new InternalServerErrorException('방 생성 못함');
 		}
 
-		return { roomId: room.roomId };
+		return room;
 	}
 
 	async validateRoom(roomId: string): Promise<Room> {
@@ -54,22 +54,16 @@ export class RoomRepository {
 
 		room.participants.push(userId);
 
-		const joinRoom = await this.roomRepository.save(room);
+		await this.saveRoom(room);
 
-		if (!joinRoom) {
-			throw new WsException({ message: '룸 이상함!' });
-		}
 		return room.participants.length;
 	}
 
 	async leaveRoom({ userId, room }: IJoinRoom): Promise<number> {
 		room.participants = room.participants.filter((id) => id !== userId);
 
-		const leaveRoom = await this.roomRepository.save(room);
+		await this.saveRoom(room);
 
-		if (!leaveRoom) {
-			throw new WsException({ message: '룸 이상함!' });
-		}
 		return room.participants.length;
 	}
 }

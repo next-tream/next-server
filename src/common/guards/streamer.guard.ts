@@ -15,7 +15,7 @@ export class RolesGuard implements CanActivate {
 		const user = request.user;
 
 		if (!roles.includes(user.role)) {
-			throw new ForbiddenException('스트리머만 방을 생성할 수 있습니다.');
+			throw new ForbiddenException('스트리머만 방을 생성 또는 종료할 수 있습니다.');
 		}
 
 		return true;
