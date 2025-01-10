@@ -17,6 +17,7 @@ import { Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { WsExceptionFilter } from 'src/common/filters/ws-exception.filter';
 import { RoomService } from 'src/room/room.service';
 import { RoomDto } from './dto/room.dto';
+// import { MessageDto } from './dto/message.dto';
 
 @UseFilters(WsExceptionFilter)
 @UsePipes(
@@ -72,7 +73,10 @@ export class ChatGateway
 	}
 
 	// @SubscribeMessage('chat')
-	// async chatRoom(@MessageBody('chat') chat: string, @ConnectedSocket() client: Socket) {}
+	// async chatRoom(
+	// 	@MessageBody() { roomId, message }: MessageDto,
+	// 	@ConnectedSocket() client: Socket,
+	// ) {}
 
 	@SubscribeMessage('leave')
 	async leaveRoom(
