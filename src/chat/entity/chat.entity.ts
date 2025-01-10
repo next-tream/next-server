@@ -2,7 +2,6 @@
 
 import { Column, CreateDateColumn, Entity, ObjectId, ObjectIdColumn } from 'typeorm';
 
-/** @format */
 @Entity()
 export class Chat {
 	@ObjectIdColumn()

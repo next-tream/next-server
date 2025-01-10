@@ -19,6 +19,7 @@ import { WinstonLoggerOptions } from './common/logger/winston.logger';
 import { WinstonModule } from 'nest-winston';
 import { validationSchema } from './common/configs/validation.schema';
 import { RoomModule } from './room/room.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
 	imports: [
@@ -45,6 +46,7 @@ import { RoomModule } from './room/room.module';
 		MailModule,
 		ChatModule,
 		RoomModule,
+		SearchModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

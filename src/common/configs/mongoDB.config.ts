@@ -6,6 +6,7 @@ import { Chat } from 'src/chat/entity/chat.entity';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { Room } from 'src/room/entity/room.entity';
+import { Search } from 'src/search/entity/search.entity';
 
 @Injectable()
 export class MongoDBConfig implements TypeOrmOptionsFactory {
@@ -16,7 +17,7 @@ export class MongoDBConfig implements TypeOrmOptionsFactory {
 			type: 'mongodb',
 			url: this.configService.get<string>('MONGO_DB_URI'),
 			database: this.configService.get<string>('MONGO_DB_DATABASE'),
-			entities: [Chat, Room],
+			entities: [Chat, Room, Search],
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 			synchronize: this.configService.get<string>('ENV') === 'dev',

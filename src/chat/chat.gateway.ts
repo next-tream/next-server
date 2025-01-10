@@ -57,6 +57,7 @@ export class ChatGateway
 		@MessageBody() { roomId }: RoomDto,
 		@ConnectedSocket() client: Socket,
 	): Promise<void> {
+		console.log(roomId);
 		const { userCount, payload } = await this.roomService.joinAndLeaveRoom({
 			roomId,
 			client,
