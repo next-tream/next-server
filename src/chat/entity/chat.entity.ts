@@ -12,7 +12,7 @@ export class Chat {
 	roomId: string;
 
 	@Column()
-	senderId: string;
+	senderId: number;
 
 	@Column()
 	message: string;

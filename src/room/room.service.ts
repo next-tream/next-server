@@ -57,7 +57,7 @@ export class RoomService {
 		return { userCount, payload };
 	}
 
-	private async validateRoomAndUser({
+	async validateRoomAndUser({
 		roomId,
 		client,
 	}: ISocket): Promise<{ room: Room; payload: IJwtPayload }> {

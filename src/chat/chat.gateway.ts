@@ -76,7 +76,15 @@ export class ChatGateway
 	async chatRoom(
 		@MessageBody() { roomId, message }: MessageDto,
 		@ConnectedSocket() client: Socket,
-	) {}
+	) {
+		const { payload } = await this.roomService.validateRoomAndUser({ roomId, client });
+
+		await this.chatService.saveChat({ roomId, senderId: payload.id, message });
+
+		this.server.to(roomId).emit('chat', {
+			message,
+		});
+	}
 
 	@SubscribeMessage('leave')
 	async leaveRoom(
