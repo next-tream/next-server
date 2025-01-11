@@ -9,7 +9,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entity/user.entity';
 import { Repository } from 'typeorm';
-import { IRegisterUser } from '../../common/interfaces/register-user.interface';
+import { IRegisterUser } from 'src/common/interfaces/verify.interface';
 
 @Injectable()
 export class UserRepository {

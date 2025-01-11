@@ -3,7 +3,7 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
-import { IJwtPayload } from '../interfaces/jwt-payload.interface';
+import { IJwtPayload } from '../interfaces/token.interface';
 import { JwtService } from '@nestjs/jwt';
 import { Socket } from 'socket.io';
 

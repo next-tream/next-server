@@ -2,7 +2,7 @@
 
 import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
-import { IEmailCode } from 'src/common/interfaces/email-code.interface';
+import { IEmailCode } from 'src/common/interfaces/email.interface';
 
 /** @format */
 @Injectable()

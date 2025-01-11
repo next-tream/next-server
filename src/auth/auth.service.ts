@@ -1,14 +1,13 @@
 /** @format */
 
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { IPayload, ISocial } from 'src/common/interfaces/token.interface';
 
 import { BcryptService } from 'src/bcrypt/bcrypt.service';
 import { CodeService } from 'src/code/code.service';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EUserColor } from '../common/enums/user-color.enum';
-import { IPayload } from 'src/common/interfaces/payload.interface';
-import { ISocial } from 'src/common/interfaces/social.interface';
 import { IToken } from 'src/common/interfaces/token.interface';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';

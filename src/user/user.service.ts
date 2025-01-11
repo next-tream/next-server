@@ -1,6 +1,6 @@
 /** @format */
 
-import { IRegisterUser } from '../common/interfaces/register-user.interface';
+import { IRegisterUser } from '../common/interfaces/verify.interface';
 import { IUserTag } from 'src/common/interfaces/user-tag.interface';
 import { IVerify } from '../common/interfaces/verify.interface';
 import { Injectable } from '@nestjs/common';

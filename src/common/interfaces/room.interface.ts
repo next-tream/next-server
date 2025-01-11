@@ -1,6 +1,6 @@
 /** @format */
 
-import { IJwtPayload } from './jwt-payload.interface';
+import { IJwtPayload } from './token.interface';
 import { Room } from 'src/room/entity/room.entity';
 import { Socket } from 'socket.io';
 

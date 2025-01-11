@@ -11,7 +11,7 @@ import {
 	IUpdateRoom,
 } from 'src/common/interfaces/room.interface';
 
-import { IJwtPayload } from 'src/common/interfaces/jwt-payload.interface';
+import { IJwtPayload } from 'src/common/interfaces/token.interface';
 import { Room } from './entity/room.entity';
 import { RoomRepository } from './repository/room.repository';
 

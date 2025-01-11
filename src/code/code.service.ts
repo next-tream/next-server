@@ -6,11 +6,10 @@ import {
 	Injectable,
 	NotFoundException,
 } from '@nestjs/common';
+import { IEmailCode, ISendCode } from 'src/common/interfaces/email.interface';
 
 import { CodeRepository } from './repository/code.repository';
 import { CompareCodeDto } from './dto/compare-code.dto';
-import { IEmailCode } from 'src/common/interfaces/email-code.interface';
-import { ISendCode } from 'src/common/interfaces/send-code.interface';
 import { MailService } from 'src/mail/mail.service';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { cacheRepository } from './repository/cache.repository';

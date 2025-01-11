@@ -1,6 +1,6 @@
 /** @format */
 
-import { IAccessToken } from './access-token.interface';
+import { IAccessToken } from './token.interface';
 
 export interface ILoginResponse extends IAccessToken {
 	isTag: boolean;

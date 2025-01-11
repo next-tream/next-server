@@ -2,7 +2,7 @@
 
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 
-import { IEmailCode } from '../common/interfaces/email-code.interface';
+import { IEmailCode } from 'src/common/interfaces/email.interface';
 import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()

@@ -3,7 +3,7 @@
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 
-import { IEmailCode } from 'src/common/interfaces/email-code.interface';
+import { IEmailCode } from 'src/common/interfaces/email.interface';
 
 @Injectable()
 export class cacheRepository {

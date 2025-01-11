@@ -4,7 +4,7 @@ import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/com
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { ConfigService } from '@nestjs/config';
-import { IJwtPayload } from 'src/common/interfaces/jwt-payload.interface';
+import { IJwtPayload } from '../interfaces/token.interface';
 import { PassportStrategy } from '@nestjs/passport';
 import { UserRepository } from '../../user/repository/user.repository';
 

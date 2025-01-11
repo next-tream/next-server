@@ -22,7 +22,7 @@ import { LocalGuard } from 'src/common/guards/local.guard';
 import { IToken } from 'src/common/interfaces/token.interface';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RefreshTokenGuard } from 'src/common/guards/refresh-token.guard';
-import { IAccessToken } from 'src/common/interfaces/access-token.interface';
+import { IAccessToken } from 'src/common/interfaces/token.interface';
 import { Response } from 'express';
 import { DUser } from 'src/common/decorators/user.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
