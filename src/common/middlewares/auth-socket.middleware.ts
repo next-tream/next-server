@@ -24,7 +24,7 @@ export class AuthSocketMiddleware implements NestMiddleware {
 
 			if (!token) {
 				this.logger.error('토큰 없음');
-				next(new Error('토큰 없어영'));
+				next(new Error('토큰 없어'));
 				socket.disconnect();
 				return;
 			}
