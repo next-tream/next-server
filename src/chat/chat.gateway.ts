@@ -75,9 +75,12 @@ export class ChatGateway
 
 		client.leave(roomId);
 
-		this.server.to(roomId).emit('chat', {
-			message: `${payload.nickname} 님이 방을 떠났습니다.`,
-		});
+		this.server
+			.of('/')
+			.to(roomId)
+			.emit('chat', {
+				message: `${payload.nickname} 님이 방을 떠났습니다.`,
+			});
 	}
 
 	@SubscribeMessage('chat')
