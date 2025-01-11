@@ -42,8 +42,9 @@ export class UserRepository {
 	}
 
 	async isUUIDAvailable(id: number): Promise<User> {
-		const user: User = await this.userRepository.findOneBy({
-			id,
+		const user: User = await this.userRepository.findOne({
+			where: { id },
+			relations: ['tags'],
 		});
 		if (!user) {
 			throw new NotFoundException('uuid 없음');

@@ -8,6 +8,7 @@ import { UserService } from './user.service';
 import { DUser } from 'src/common/decorators/user.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { User } from './entity/user.entity';
+import { Tag } from './entity/tag.entity';
 
 @Controller('user')
 export class UserController {
@@ -29,7 +30,7 @@ export class UserController {
 	})
 	@ApiBearerAuth()
 	@Get('tag')
-	getUserTags(@DUser() user: User) {
-		console.log(user);
+	getUserTags(@DUser() user: User): Tag[] {
+		return user.tags;
 	}
 }
