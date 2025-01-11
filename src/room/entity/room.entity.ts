@@ -1,6 +1,13 @@
 /** @format */
 
-import { Column, CreateDateColumn, Entity, ObjectId, ObjectIdColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	ObjectId,
+	ObjectIdColumn,
+	UpdateDateColumn,
+} from 'typeorm';
 
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -31,4 +38,7 @@ export class Room {
 
 	@CreateDateColumn()
 	createdAt: Date;
+
+	@UpdateDateColumn()
+	updatedAt: Date;
 }

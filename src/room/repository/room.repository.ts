@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Room } from '../entity/room.entity';
-import { ICreateRoom, IJoinRoom, IRoom, IRoomId } from 'src/common/interfaces/room.interface';
+import { ICreateRoom, IJoinRoom, IRoom } from 'src/common/interfaces/room.interface';
 import { WsException } from '@nestjs/websockets';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class RoomRepository {
 		});
 	}
 
-	async saveRoom(createRoom: ICreateRoom): Promise<IRoomId> {
+	async saveRoom(createRoom: ICreateRoom): Promise<Room> {
 		const room = await this.roomRepository.save(createRoom);
 
 		if (!room) {
@@ -47,19 +47,19 @@ export class RoomRepository {
 		return room;
 	}
 
-	async joinRoom({ userId, room }: IJoinRoom): Promise<void> {
+	async joinRoom({ userId, room }: IJoinRoom): Promise<Room> {
 		if (room.participants.includes(userId)) {
 			throw new WsException({ message: `${userId}가 이미 방에 존재함` });
 		}
 
 		room.participants.push(userId);
 
-		await this.saveRoom(room);
+		return await this.saveRoom(room);
 	}
 
-	async leaveRoom({ userId, room }: IJoinRoom): Promise<void> {
+	async leaveRoom({ userId, room }: IJoinRoom): Promise<Room> {
 		room.participants = room.participants.filter((id) => id !== userId);
 
-		await this.saveRoom(room);
+		return await this.saveRoom(room);
 	}
 }

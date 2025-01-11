@@ -8,6 +8,7 @@ import {
 	IRoom,
 	IRoomId,
 	ISocket,
+	IUpdateRoom,
 } from 'src/common/interfaces/room.interface';
 
 import { IJwtPayload } from 'src/common/interfaces/jwt-payload.interface';
@@ -37,14 +38,14 @@ export class RoomService {
 		await this.roomRepository.saveRoom(room);
 	}
 
-	async joinAndLeaveRoom({ roomId, client, isJoin }: IJoinSocket): Promise<IJwtPayload> {
+	async joinAndLeaveRoom({ roomId, client, isJoin }: IJoinSocket): Promise<IUpdateRoom> {
 		const { room, payload } = await this.validateRoomAndUser({ roomId, client });
 
 		const operation = isJoin ? this.roomRepository.joinRoom : this.roomRepository.leaveRoom;
 
-		await operation.call(this.roomRepository, { userId: payload.id, room });
+		const updateRoom = await operation.call(this.roomRepository, { userId: payload.id, room });
 
-		return payload;
+		return { payload, updateRoom };
 	}
 
 	async validateRoomAndUser({

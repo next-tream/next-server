@@ -1,5 +1,6 @@
 /** @format */
 
+import { IJwtPayload } from './jwt-payload.interface';
 import { Room } from 'src/room/entity/room.entity';
 import { Socket } from 'socket.io';
 
@@ -30,4 +31,9 @@ export interface ICreateRoom extends IRoom {
 export interface IJoinRoom {
 	userId: number;
 	room: Room;
+}
+
+export interface IUpdateRoom {
+	payload: IJwtPayload;
+	updateRoom: Room;
 }

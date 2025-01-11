@@ -47,7 +47,7 @@ export class ChatGateway
 		this.logger.log(`handle connection socket: ${client.id}`);
 		const roomId = client.handshake.query.roomId as string;
 
-		const payload = await this.roomService.joinAndLeaveRoom({
+		const { payload, updateRoom } = await this.roomService.joinAndLeaveRoom({
 			roomId,
 			client,
 			isJoin: true,
@@ -60,6 +60,7 @@ export class ChatGateway
 			.to(roomId)
 			.emit('chat', {
 				message: `${payload.nickname} 님이 입장했습니다.`,
+				createdAt: updateRoom.updatedAt,
 			});
 	}
 
@@ -67,7 +68,7 @@ export class ChatGateway
 		this.logger.log(`handle disconection socket: ${client.id}`);
 		const roomId = client.handshake.query.roomId as string;
 
-		const payload = await this.roomService.joinAndLeaveRoom({
+		const { payload, updateRoom } = await this.roomService.joinAndLeaveRoom({
 			roomId,
 			client,
 			isJoin: false,
@@ -80,6 +81,7 @@ export class ChatGateway
 			.to(roomId)
 			.emit('chat', {
 				message: `${payload.nickname} 님이 방을 떠났습니다.`,
+				createdAt: updateRoom.updatedAt,
 			});
 	}
 
