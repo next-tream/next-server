@@ -57,6 +57,6 @@ async function bootstrap() {
 		},
 	});
 
-	await app.listen(process.env.HTTP_PORT ?? 8080);
+	await app.listen(process.env.HTTP_PORT ?? 8080, process.env.ENV == 'dev' && '172.16.20.171');
 }
 bootstrap();

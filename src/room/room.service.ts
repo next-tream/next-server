@@ -37,24 +37,14 @@ export class RoomService {
 		await this.roomRepository.saveRoom(room);
 	}
 
-	async joinAndLeaveRoom({
-		roomId,
-		client,
-		isJoin,
-	}: IJoinSocket): Promise<{ userCount: number; payload: IJwtPayload }> {
+	async joinAndLeaveRoom({ roomId, client, isJoin }: IJoinSocket): Promise<IJwtPayload> {
 		const { room, payload } = await this.validateRoomAndUser({ roomId, client });
 
-		const userCount: number = isJoin
-			? await this.roomRepository.joinRoom({
-					userId: payload.id,
-					room,
-				})
-			: await this.roomRepository.leaveRoom({
-					userId: payload.id,
-					room,
-				});
+		const operation = isJoin ? this.roomRepository.joinRoom : this.roomRepository.leaveRoom;
 
-		return { userCount, payload };
+		await operation.call(this.roomRepository, { userId: payload.id, room });
+
+		return payload;
 	}
 
 	async validateRoomAndUser({

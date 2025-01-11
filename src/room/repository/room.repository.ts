@@ -47,7 +47,7 @@ export class RoomRepository {
 		return room;
 	}
 
-	async joinRoom({ userId, room }: IJoinRoom): Promise<number> {
+	async joinRoom({ userId, room }: IJoinRoom): Promise<void> {
 		if (room.participants.includes(userId)) {
 			throw new WsException({ message: `${userId}가 이미 방에 존재함` });
 		}
@@ -55,15 +55,11 @@ export class RoomRepository {
 		room.participants.push(userId);
 
 		await this.saveRoom(room);
-
-		return room.participants.length;
 	}
 
-	async leaveRoom({ userId, room }: IJoinRoom): Promise<number> {
+	async leaveRoom({ userId, room }: IJoinRoom): Promise<void> {
 		room.participants = room.participants.filter((id) => id !== userId);
 
 		await this.saveRoom(room);
-
-		return room.participants.length;
 	}
 }
