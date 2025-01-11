@@ -1,6 +1,6 @@
 /** @format */
 
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
 import { IJwtPayload } from '../interfaces/jwt-payload.interface';
@@ -13,6 +13,7 @@ export class AuthSocketMiddleware implements NestMiddleware {
 		private readonly jwtService: JwtService,
 		private readonly configService: ConfigService,
 	) {}
+	private logger = new Logger(AuthSocketMiddleware.name);
 
 	use(socket: Socket, next: (err?: Error) => void) {
 		try {
@@ -22,6 +23,7 @@ export class AuthSocketMiddleware implements NestMiddleware {
 				socket.handshake.headers?.authorization.split(' ')[1];
 
 			if (!token) {
+				this.logger.error('토큰 없음');
 				next(new Error('토큰 없어영'));
 				socket.disconnect();
 				return;
@@ -35,7 +37,7 @@ export class AuthSocketMiddleware implements NestMiddleware {
 
 			next();
 		} catch (err) {
-			console.log(err);
+			this.logger.error('토큰 이상', err);
 			next(new Error('토큰 이상해여'));
 			socket.disconnect();
 			return;
