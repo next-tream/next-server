@@ -93,7 +93,7 @@ export class ChatGateway
 
 		await this.chatService.saveChat({ roomId, senderId: payload.id, message });
 
-		this.server.in(roomId).emit('chat', {
+		this.server.of('/').in(roomId).emit('chat', {
 			message,
 			color: payload.color,
 			nickname: payload.nickname,

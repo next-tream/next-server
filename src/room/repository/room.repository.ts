@@ -48,9 +48,9 @@ export class RoomRepository {
 	}
 
 	async joinRoom({ userId, room }: IJoinRoom): Promise<void> {
-		// if (room.participants.includes(userId)) {
-		// 	throw new WsException({ message: `${userId}가 이미 방에 존재함` });
-		// }
+		if (room.participants.includes(userId)) {
+			throw new WsException({ message: `${userId}가 이미 방에 존재함` });
+		}
 
 		room.participants.push(userId);
 
