@@ -20,6 +20,7 @@ import { WinstonModule } from 'nest-winston';
 import { validationSchema } from './common/configs/validation.schema';
 import { RoomModule } from './room/room.module';
 import { SearchModule } from './search/search.module';
+import { FollowModule } from './follow/follow.module';
 
 @Module({
 	imports: [
@@ -47,6 +48,7 @@ import { SearchModule } from './search/search.module';
 		ChatModule,
 		RoomModule,
 		SearchModule,
+		FollowModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

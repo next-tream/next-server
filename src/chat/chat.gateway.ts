@@ -91,12 +91,13 @@ export class ChatGateway
 		this.logger.log('chat', message);
 		const { payload } = await this.roomService.validateRoomAndUser({ roomId, client });
 
-		await this.chatService.saveChat({ roomId, senderId: payload.id, message });
+		const chat = await this.chatService.saveChat({ roomId, senderId: payload.id, message });
 
 		this.server.of('/').in(roomId).emit('chat', {
 			message,
 			color: payload.color,
 			nickname: payload.nickname,
+			createdAt: chat.sentAt,
 		});
 	}
 }
