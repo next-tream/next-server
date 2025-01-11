@@ -1,6 +1,6 @@
 /** @format */
 
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 
 import { TagDto } from './dto/tag.dto';
 import { UserService } from './user.service';
@@ -21,5 +21,15 @@ export class UserController {
 	@Post('tag')
 	createUserTag(@DUser() user: User, @Body() { tags }: TagDto) {
 		this.userService.createUserTag({ user, tags });
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({
+		summary: '유저 태그 불러오기',
+	})
+	@ApiBearerAuth()
+	@Get('tag')
+	getUserTags(@DUser() user: User) {
+		console.log(user);
 	}
 }
