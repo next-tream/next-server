@@ -1,5 +1,8 @@
 /** @format */
+
 import { ERole } from '../enums/role.enum';
+/** @format */
+import { Tag } from 'src/user/entity/tag.entity';
 
 export interface IAccessToken {
 	accessToken: string;
@@ -25,4 +28,5 @@ export interface IJwtPayload extends IPayload {
 
 export interface ISocial extends IToken {
 	id: number;
+	tags: Tag[];
 }

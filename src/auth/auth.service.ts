@@ -49,7 +49,7 @@ export class AuthService {
 		};
 	}
 
-	async loginSocial({ email, ...rest }: User): Promise<ISocial> {
+	async loginSocial({ email, loginType, ...rest }: User): Promise<ISocial> {
 		let user: User | null = await this.userRepository.findUserForEmail(email, true);
 
 		if (!user) {
@@ -60,19 +60,21 @@ export class AuthService {
 				color,
 				email,
 				isVerified: true,
-				loginType: rest.loginType,
+				loginType,
 			});
 		}
 
+		const { id, role, nickname, color, tags } = user;
+
 		const token = await this.login({
-			id: user.id,
-			email: user.email,
-			role: user.role,
-			nickname: user.nickname,
-			color: user.color,
+			id,
+			email,
+			role,
+			nickname,
+			color,
 		});
 
-		return { ...token, id: user.id };
+		return { ...token, id, tags };
 	}
 
 	async autheticate(email: string, password: string): Promise<User> {

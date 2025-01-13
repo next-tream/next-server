@@ -89,12 +89,13 @@ export class AuthController {
 	@DPublic()
 	@Get('login')
 	async loginSocial(
-		@DUser() user: User,
+		@DUser() socialUser: User,
 		@Query('social') social: string,
 		@Res({ passthrough: true }) res: Response,
 		@Session() session: Record<string, any>,
 	): Promise<ILoginResponse> {
-		const { accessToken, refreshToken, id } = await this.authService.loginSocial(user);
+		const { accessToken, refreshToken, id, tags } =
+			await this.authService.loginSocial(socialUser);
 
 		session[id] = { refreshToken };
 
@@ -106,7 +107,7 @@ export class AuthController {
 			domain: process.env.SUB_DOMAIN,
 		});
 
-		return { accessToken, isTag: user.tags.length !== 0 };
+		return { accessToken, isTag: tags.length !== 0 };
 	}
 
 	@HttpCode(HttpStatus.OK)
