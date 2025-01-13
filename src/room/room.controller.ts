@@ -1,6 +1,15 @@
 /** @format */
 
-import { Body, Controller, Delete, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	HttpCode,
+	HttpStatus,
+	Post,
+	UseGuards,
+} from '@nestjs/common';
 import { CreateRoomDto } from '../room/dto/create-room.dto';
 import { RoomService } from './room.service';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
@@ -11,6 +20,7 @@ import { DUser } from 'src/common/decorators/user.decorator';
 import { User } from 'src/user/entity/user.entity';
 import { IRoomId } from 'src/common/interfaces/room.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { DPublic } from 'src/common/decorators/pubilc.decorator';
 
 @Controller('room')
 export class RoomController {
@@ -38,6 +48,17 @@ export class RoomController {
 	})
 	postRoom(@Body() createRoomDto: CreateRoomDto, @DUser() { id }: User): Promise<IRoomId> {
 		return this.roomService.createRoom({ ...createRoomDto, streamerId: id });
+	}
+
+	@Get()
+	@HttpCode(HttpStatus.OK)
+	@DPublic()
+	@UseGuards(JwtGuard)
+	@ApiOperation({
+		summary: '방송 전부 갖고오기',
+	})
+	fetchAllRoom() {
+		return 1;
 	}
 
 	@Delete()
