@@ -3,10 +3,11 @@
 import {
 	Body,
 	Controller,
-	Delete,
 	Get,
 	HttpCode,
 	HttpStatus,
+	Param,
+	Patch,
 	Post,
 	UseGuards,
 } from '@nestjs/common';
@@ -21,7 +22,6 @@ import { User } from 'src/user/entity/user.entity';
 import { IRoomId } from 'src/common/interfaces/room.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DPublic } from 'src/common/decorators/pubilc.decorator';
-import { DelelteRoomDto } from './dto/delete-room.dto';
 
 @Controller('room')
 export class RoomController {
@@ -62,15 +62,15 @@ export class RoomController {
 		return 1;
 	}
 
-	@Delete()
-	@HttpCode(HttpStatus.NO_CONTENT)
+	@Patch(':roomId')
+	@HttpCode(HttpStatus.OK)
 	@DRoles(ERole.STREAMER)
 	@UseGuards(JwtGuard, RolesGuard)
 	@ApiOperation({
 		summary: '방송 종료',
 	})
 	@ApiResponse({
-		status: 204,
+		status: 200,
 		description: '방송 종료',
 		type: String,
 		examples: {
@@ -80,7 +80,7 @@ export class RoomController {
 			},
 		},
 	})
-	deleteRoom(@Body() { roomId }: DelelteRoomDto, @DUser() { id }: User): Promise<void> {
+	endBroadcast(@Param('roomId') roomId: string, @DUser() { id }: User): Promise<void> {
 		return this.roomService.endRoom({ roomId, streamerId: id });
 	}
 }
