@@ -21,6 +21,7 @@ import { User } from 'src/user/entity/user.entity';
 import { IRoomId } from 'src/common/interfaces/room.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DPublic } from 'src/common/decorators/pubilc.decorator';
+import { DelelteRoomDto } from './dto/delete-room.dto';
 
 @Controller('room')
 export class RoomController {
@@ -79,7 +80,7 @@ export class RoomController {
 			},
 		},
 	})
-	deleteRoom(@Body() { roomId }: IRoomId, @DUser() { id }: User): Promise<void> {
+	deleteRoom(@Body() { roomId }: DelelteRoomDto, @DUser() { id }: User): Promise<void> {
 		return this.roomService.endRoom({ roomId, streamerId: id });
 	}
 }

@@ -57,7 +57,7 @@ export class RoomService {
 	async validateRoomAndUser({
 		roomId,
 		client,
-	}: ISocket): Promise<{ room: Room; payload: IJwtPayload }> {
+	}: ISocket): Promise<{ room: Room; payload: IJwtPayload } | null> {
 		const room: Room = await this.roomRepository.validateRoom(roomId, client);
 		const payload: IJwtPayload = client.data.user;
 
