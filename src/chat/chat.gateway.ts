@@ -55,13 +55,14 @@ export class ChatGateway
 
 		client.join(roomId);
 
-		this.server
-			.of('/')
-			.to(roomId)
-			.emit('chat', {
-				message: `${payload.nickname} 님이 입장했습니다.`,
-				createdAt: updateRoom.updatedAt,
-			});
+		if (updateRoom)
+			this.server
+				.of('/')
+				.to(roomId)
+				.emit('chat', {
+					message: `${payload.nickname} 님이 입장했습니다.`,
+					createdAt: updateRoom.updatedAt,
+				});
 	}
 
 	async handleDisconnect(client: Socket) {

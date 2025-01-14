@@ -1,6 +1,6 @@
 /** @format */
 
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -8,7 +8,7 @@ import { MongoRepository } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Room } from '../entity/room.entity';
 import { ICreateRoom, IJoinRoom, IRoom } from 'src/common/interfaces/room.interface';
-import { WsException } from '@nestjs/websockets';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class RoomRepository {
@@ -35,21 +35,40 @@ export class RoomRepository {
 		return room;
 	}
 
-	async validateRoom(roomId: string): Promise<Room> {
+	async validateHttpRoom(roomId: string): Promise<Room> {
 		const room = await this.roomRepository.findOne({
 			where: { _id: new ObjectId(roomId) },
 		});
 
 		if (!room) {
-			throw new WsException({ message: '룸 이상함!' });
+			throw new BadRequestException('방없음');
 		}
 
 		return room;
 	}
 
-	async joinRoom({ userId, room }: IJoinRoom): Promise<Room> {
+	async validateRoom(roomId: string, client: Socket): Promise<Room> {
+		if (!ObjectId.isValid(roomId)) {
+			client.emit('error', 'RoomdID 이상함');
+			return;
+		}
+
+		const room = await this.roomRepository.findOne({
+			where: { _id: new ObjectId(roomId) },
+		});
+
+		if (!room) {
+			client.emit('error', '룸 이상함');
+			return;
+		}
+
+		return room;
+	}
+
+	async joinRoom({ userId, room, client }: IJoinRoom): Promise<Room> {
 		if (room.participants.includes(userId)) {
-			throw new WsException({ message: `${userId}가 이미 방에 존재함` });
+			client.emit('error', `${userId}가 이미 방에 존재함`);
+			return;
 		}
 
 		room.participants.push(userId);
