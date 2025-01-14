@@ -19,7 +19,7 @@ export class RoomRepository {
 	createRoom(room: IRoom): ICreateRoom {
 		return this.roomRepository.create({
 			...room,
-			participants: [room.streamerId],
+			participants: [],
 			isLive: true,
 		});
 	}
