@@ -8,7 +8,6 @@ import { MongoRepository } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Room } from '../entity/room.entity';
 import { ICreateRoom, IJoinRoom, IRoom } from 'src/common/interfaces/room.interface';
-import { Socket } from 'socket.io';
 
 @Injectable()
 export class RoomRepository {
@@ -35,6 +34,16 @@ export class RoomRepository {
 		return room;
 	}
 
+	async updateParticipants(room: Room): Promise<Room | '6'> {
+		const updateRoom = await this.roomRepository.save(room);
+
+		if (!updateRoom) {
+			return '6';
+		}
+
+		return updateRoom;
+	}
+
 	async validateHttpRoom(roomId: string): Promise<Room> {
 		const room = await this.roomRepository.findOne({
 			where: { _id: new ObjectId(roomId) },
@@ -47,30 +56,19 @@ export class RoomRepository {
 		return room;
 	}
 
-	async validateRoom(roomId: string, client: Socket): Promise<Room> {
-		if (!ObjectId.isValid(roomId)) {
-			client.emit('error', 'RoomdID 이상함');
-			return;
-		}
-
+	async validateRoom(roomId: string): Promise<Room | '4'> {
 		const room = await this.roomRepository.findOne({
 			where: { _id: new ObjectId(roomId) },
 		});
 
 		if (!room) {
-			client.emit('error', '룸 이상함');
-			return;
+			return '4';
 		}
 
 		return room;
 	}
 
-	async joinRoom({ userId, room, client }: IJoinRoom): Promise<Room> {
-		if (room.participants.includes(userId)) {
-			client.emit('error', `${userId}가 이미 방에 존재함`);
-			return;
-		}
-
+	async joinRoom({ userId, room }: IJoinRoom): Promise<Room> {
 		room.participants.push(userId);
 
 		return await this.saveRoom(room);

@@ -8,7 +8,6 @@ import { MongoRepository } from 'typeorm';
 
 import { Chat } from '../entity/chat.entity';
 import { IChat } from 'src/common/interfaces/chat.interface';
-import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class ChatRepository {
@@ -21,11 +20,11 @@ export class ChatRepository {
 		return this.chatRepository.create(chat);
 	}
 
-	async saveChat(chat: IChat): Promise<Chat> {
+	async saveChat(chat: IChat): Promise<Chat | '9'> {
 		const saveChat = await this.chatRepository.save(chat);
 
 		if (!saveChat) {
-			throw new WsException('채팅이 정상적으로 저장되지 않았습니다.');
+			return '9';
 		}
 
 		return saveChat;

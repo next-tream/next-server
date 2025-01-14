@@ -9,8 +9,12 @@ import { Injectable } from '@nestjs/common';
 export class ChatService {
 	constructor(private readonly chatRepository: ChatRepository) {}
 
-	async saveChat({ roomId, senderId, message }: IChat): Promise<Chat> {
+	async saveChat({ roomId, senderId, message }: IChat): Promise<Chat | '8' | '9'> {
 		const chat = this.chatRepository.createChat({ roomId, senderId, message });
+
+		if (!chat) {
+			return '8';
+		}
 
 		return await this.chatRepository.saveChat(chat);
 	}

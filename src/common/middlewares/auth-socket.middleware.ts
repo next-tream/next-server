@@ -17,15 +17,13 @@ export class AuthSocketMiddleware implements NestMiddleware {
 
 	use(socket: Socket, next: (err?: Error) => void) {
 		try {
-			const token =
-				socket.handshake.auth?.token ||
-				socket.handshake.query?.token ||
-				socket.handshake.headers?.authorization.split(' ')[1];
+			const token: string | undefined =
+				socket.handshake.auth.token || socket.handshake.query.token;
 
 			if (!token) {
 				this.logger.error('토큰 없음');
-				next(new Error('토큰 없어'));
 				socket.disconnect();
+				next(new Error('0'));
 				return;
 			}
 
@@ -38,8 +36,8 @@ export class AuthSocketMiddleware implements NestMiddleware {
 			next();
 		} catch (err) {
 			this.logger.error('토큰 이상', err);
-			next(new Error('토큰 이상해여'));
 			socket.disconnect();
+			next(new Error('1'));
 			return;
 		}
 	}

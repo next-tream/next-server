@@ -31,7 +31,6 @@ export interface ICreateRoom extends IRoom {
 export interface IJoinRoom {
 	userId: number;
 	room: Room;
-	client: Socket;
 }
 
 export interface IUpdateRoom {
