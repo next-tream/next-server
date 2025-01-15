@@ -1,6 +1,6 @@
 /** @format */
 
-import { IsNotEmpty, IsStrongPassword } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsStrongPassword } from 'class-validator';
 
 import { EmailDto } from 'src/common/dto/email.dto';
 
@@ -14,4 +14,8 @@ export class LoginUserDto extends EmailDto {
 		minSymbols: 1,
 	})
 	password: string;
+
+	@IsOptional()
+	@IsBoolean()
+	dev: boolean;
 }

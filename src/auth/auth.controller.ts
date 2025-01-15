@@ -58,17 +58,20 @@ export class AuthController {
 	@Post('login')
 	async login(
 		@DUser() { id, role, email, nickname, color, tags }: User,
-		@Body() loginUserDto: LoginUserDto,
+		@Body() { dev = false }: LoginUserDto,
 		@Res({ passthrough: true }) res: Response,
 		@Session() session: Record<string, any>,
 	): Promise<ILoginResponse> {
-		const { accessToken, refreshToken }: IToken = await this.authService.login({
-			id,
-			role,
-			email,
-			nickname,
-			color,
-		});
+		const { accessToken, refreshToken }: IToken = await this.authService.login(
+			{
+				id,
+				role,
+				email,
+				nickname,
+				color,
+			},
+			dev,
+		);
 
 		session[id] = { refreshToken };
 
@@ -130,13 +133,16 @@ export class AuthController {
 	async reissueAccessToken(
 		@DUser() { id, role, email, nickname, color }: User,
 	): Promise<IAccessToken> {
-		const accessToken = await this.authService.generateAccessToken({
-			id,
-			role,
-			email,
-			nickname,
-			color,
-		});
+		const accessToken = await this.authService.generateAccessToken(
+			{
+				id,
+				role,
+				email,
+				nickname,
+				color,
+			},
+			false,
+		);
 
 		return { accessToken };
 	}

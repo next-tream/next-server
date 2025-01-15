@@ -42,9 +42,9 @@ export class AuthService {
 		});
 	}
 
-	async login(payload: IPayload): Promise<IToken> {
+	async login(payload: IPayload, dev: boolean): Promise<IToken> {
 		return {
-			accessToken: await this.generateAccessToken(payload),
+			accessToken: await this.generateAccessToken(payload, dev),
 			refreshToken: await this.generateRefreshToken(payload),
 		};
 	}
@@ -66,13 +66,16 @@ export class AuthService {
 
 		const { id, role, nickname, color, tags } = user;
 
-		const token = await this.login({
-			id,
-			email,
-			role,
-			nickname,
-			color,
-		});
+		const token = await this.login(
+			{
+				id,
+				email,
+				role,
+				nickname,
+				color,
+			},
+			false,
+		);
 
 		return { ...token, id, tags };
 	}
@@ -97,7 +100,7 @@ export class AuthService {
 		await this.userRepository.saveUser(user);
 	}
 
-	async generateAccessToken(payload: IPayload): Promise<string> {
+	async generateAccessToken(payload: IPayload, dev: boolean): Promise<string> {
 		return await this.jwtService.signAsync(
 			{
 				...payload,
@@ -105,7 +108,7 @@ export class AuthService {
 			},
 			{
 				secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-				expiresIn: '1h',
+				expiresIn: dev ? 10 : '1h',
 			},
 		);
 	}
