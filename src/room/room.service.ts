@@ -48,7 +48,7 @@ export class RoomService {
 	}
 
 	async findRoom(roomId: string): Promise<IFindRoom> {
-		const { name, tags, streamerId, isLive, participants } =
+		const { name, tags, streamerId, isLive, participants, createdAt } =
 			await this.roomRepository.validateHttpRoom(roomId);
 
 		const { nickname, image } = await this.userRepository.isUUIDAvailable(streamerId);
@@ -60,6 +60,7 @@ export class RoomService {
 			participantsLength: participants.length,
 			nickname,
 			streamerImage: image,
+			createdAt,
 		};
 	}
 }

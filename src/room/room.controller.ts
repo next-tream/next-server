@@ -72,6 +72,7 @@ export class RoomController {
 					nickname: 'BJ 홍식',
 					streamerImage:
 						'https://nextream-thumnail.s3.ap-northeast-2.amazonaws.com/hong.png',
+					createdAt: '2025-01-14T07:26:58.535Z',
 					roomId: '678611c289491f85d0bba56f',
 					roomImage:
 						'https://nextream-thumnail.s3.ap-northeast-2.amazonaws.com/thumbnails/test.jpg',

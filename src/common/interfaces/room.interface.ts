@@ -45,6 +45,7 @@ export interface IFindRoom {
 	participantsLength: number;
 	nickname: string;
 	streamerImage: string;
+	createdAt: Date;
 }
 
 export interface IResFindRoom extends IFindRoom {
