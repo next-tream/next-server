@@ -37,3 +37,17 @@ export interface IUpdateRoom {
 	payload: IJwtPayload;
 	updateRoom: Room;
 }
+
+export interface IFindRoom {
+	roomName: string;
+	roomTags: number[];
+	isLive: boolean;
+	participantsLength: number;
+	nickname: string;
+	streamerImage: string;
+}
+
+export interface IResFindRoom extends IFindRoom {
+	roomId: string;
+	roomImage: string;
+}

@@ -19,7 +19,7 @@ import { DRoles } from 'src/common/decorators/roles.decorator';
 import { ERole } from 'src/common/enums/role.enum';
 import { DUser } from 'src/common/decorators/user.decorator';
 import { User } from 'src/user/entity/user.entity';
-import { IRoomId } from 'src/common/interfaces/room.interface';
+import { IFindRoom, IResFindRoom, IRoomId } from 'src/common/interfaces/room.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DPublic } from 'src/common/decorators/pubilc.decorator';
 
@@ -51,15 +51,21 @@ export class RoomController {
 		return this.roomService.createRoom({ ...createRoomDto, streamerId: id });
 	}
 
-	@Get()
+	@Get(':roomId')
 	@HttpCode(HttpStatus.OK)
 	@DPublic()
 	@UseGuards(JwtGuard)
 	@ApiOperation({
-		summary: '방송 전부 갖고오기',
+		summary: '방송 상단 갖고오기',
 	})
-	fetchAllRoom() {
-		return 1;
+	async fetchRoom(@Param('roomId') roomId: string): Promise<IResFindRoom> {
+		const roomInfor: IFindRoom = await this.roomService.findRoom(roomId);
+		return {
+			...roomInfor,
+			roomId,
+			roomImage:
+				'https://nextream-thumnail.s3.ap-northeast-2.amazonaws.com/thumbnails/test.jpg',
+		};
 	}
 
 	@Patch(':roomId')

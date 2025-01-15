@@ -1,14 +1,24 @@
 /** @format */
 
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ICreateRoom, IEndRood, IRoom, IRoomId } from 'src/common/interfaces/room.interface';
+import {
+	ICreateRoom,
+	IEndRood,
+	IFindRoom,
+	IRoom,
+	IRoomId,
+} from 'src/common/interfaces/room.interface';
 
 import { Room } from './entity/room.entity';
 import { RoomRepository } from './repository/room.repository';
+import { UserRepository } from 'src/user/repository/user.repository';
 
 @Injectable()
 export class RoomService {
-	constructor(private readonly roomRepository: RoomRepository) {}
+	constructor(
+		private readonly roomRepository: RoomRepository,
+		private readonly userRepository: UserRepository,
+	) {}
 
 	async validateRoom(roomId: string): Promise<Room | '4'> {
 		return await this.roomRepository.validateRoom(roomId);
@@ -35,5 +45,21 @@ export class RoomService {
 		room.isLive = false;
 
 		await this.roomRepository.saveRoom(room);
+	}
+
+	async findRoom(roomId: string): Promise<IFindRoom> {
+		const { name, tags, streamerId, isLive, participants } =
+			await this.roomRepository.validateHttpRoom(roomId);
+
+		const { nickname, image } = await this.userRepository.isUUIDAvailable(streamerId);
+
+		return {
+			roomName: name,
+			roomTags: tags,
+			isLive,
+			participantsLength: participants.length,
+			nickname,
+			streamerImage: image,
+		};
 	}
 }
