@@ -58,6 +58,27 @@ export class RoomController {
 	@ApiOperation({
 		summary: '방송 상단 갖고오기',
 	})
+	@ApiResponse({
+		status: 200,
+		description: '방 생성 성공',
+		examples: {
+			success: {
+				summary: '방 불러오기 성공',
+				value: {
+					roomName: '모두 최홍식의 매력에 빠져볼래요?',
+					roomTags: [1, 3],
+					isLive: true,
+					participantsLength: 0,
+					nickname: 'BJ 홍식',
+					streamerImage:
+						'https://nextream-thumnail.s3.ap-northeast-2.amazonaws.com/hong.png',
+					roomId: '678611c289491f85d0bba56f',
+					roomImage:
+						'https://nextream-thumnail.s3.ap-northeast-2.amazonaws.com/thumbnails/test.jpg',
+				},
+			},
+		},
+	})
 	async fetchRoom(@Param('roomId') roomId: string): Promise<IResFindRoom> {
 		const roomInfor: IFindRoom = await this.roomService.findRoom(roomId);
 		return {
