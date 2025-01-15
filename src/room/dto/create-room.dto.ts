@@ -8,4 +8,8 @@ export class CreateRoomDto extends TagDto {
 	@IsString()
 	@IsNotEmpty()
 	name: string;
+
+	@IsString()
+	@IsNotEmpty()
+	content: string;
 }

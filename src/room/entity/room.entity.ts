@@ -31,6 +31,9 @@ export class Room {
 	tags: number[];
 
 	@Column()
+	content: string;
+
+	@Column()
 	participants: number[];
 
 	@Column()

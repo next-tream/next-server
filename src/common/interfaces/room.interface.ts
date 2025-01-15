@@ -7,6 +7,7 @@ import { Socket } from 'socket.io';
 export interface IRoom {
 	streamerId: number;
 	name: string;
+	content: string;
 	tags: number[];
 }
 export interface IRoomId {
@@ -41,6 +42,7 @@ export interface IUpdateRoom {
 export interface IFindRoom {
 	roomName: string;
 	roomTags: number[];
+	roomContent: string;
 	isLive: boolean;
 	participantsLength: number;
 	nickname: string;
