@@ -18,6 +18,7 @@ export interface IPayload {
 	email: string;
 	nickname: string;
 	color: string;
+	image?: string;
 }
 
 export interface IJwtPayload extends IPayload {

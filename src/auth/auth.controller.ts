@@ -57,7 +57,7 @@ export class AuthController {
 	@DPublic()
 	@Post('login')
 	async login(
-		@DUser() { id, role, email, nickname, color, tags }: User,
+		@DUser() { id, role, email, nickname, color, tags, image }: User,
 		@Body() { dev = false }: LoginUserDto,
 		@Res({ passthrough: true }) res: Response,
 		@Session() session: Record<string, any>,
@@ -69,6 +69,7 @@ export class AuthController {
 				email,
 				nickname,
 				color,
+				...(image && { image }),
 			},
 			dev,
 		);

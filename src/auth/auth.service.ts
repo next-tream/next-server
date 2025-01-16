@@ -37,6 +37,7 @@ export class AuthService {
 
 		return await this.userService.registerUser({
 			...verifyObject,
+			image: 'https://i.pinimg.com/474x/3b/73/a1/3b73a13983f88f8b84e130bb3fb29e17.jpg',
 			color,
 			password: hashPassword,
 		});
