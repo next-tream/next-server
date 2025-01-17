@@ -168,17 +168,27 @@ export class ChatGateway
 		}
 
 		const chat = await this.chatService.saveChat({ roomId, senderId: id, message });
-
 		if (chat === '8' || chat === '9') {
 			this.server.of('/').to(roomId).emit('error', chat);
 			return;
 		}
 
-		this.server.of('/').in(roomId).emit('chat', {
-			message,
-			color,
-			nickname,
-			createdAt: chat.sentAt,
-		});
+		const room = await this.roomRepository.validateRoom(roomId);
+
+		if (room === '4') {
+			this.server.of('/').to(roomId).emit('error', '4');
+			return;
+		}
+
+		this.server
+			.of('/')
+			.in(roomId)
+			.emit('chat', {
+				message,
+				color,
+				nickname,
+				createdAt: chat.sentAt,
+				isStreamer: `${room.streamerId == id}`,
+			});
 	}
 }

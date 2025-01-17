@@ -109,7 +109,7 @@ export class AuthController {
 			maxAge: 604800000,
 			domain: process.env.SUB_DOMAIN,
 		});
-
+		// isTag error
 		return { accessToken, isTag: true };
 	}
 
