@@ -56,7 +56,7 @@ export class ChatGateway
 		client.join(roomId);
 
 		if (!ObjectId.isValid(roomId)) {
-			this.server.of('/').to(roomId).emit('error', '2');
+			this.server.of('/').to(roomId).emit('error', '2', client.data.user.id);
 			client.leave(roomId);
 			client.disconnect();
 			return;
@@ -64,7 +64,7 @@ export class ChatGateway
 
 		const { nickname, id }: IJwtPayload = client.data.user;
 		if (!nickname) {
-			this.server.of('/').to(roomId).emit('error', '3');
+			this.server.of('/').to(roomId).emit('error', '3', client.data.user.id);
 			client.leave(roomId);
 			return;
 		}
@@ -72,13 +72,13 @@ export class ChatGateway
 		const room: Room | '4' = await this.roomService.validateRoom(roomId);
 
 		if (room === '4') {
-			this.server.of('/').to(roomId).emit('error', '4');
+			this.server.of('/').to(roomId).emit('error', '4', client.data.user.id);
 			client.leave(roomId);
 			return;
 		}
 
 		if (room.participants.includes(id)) {
-			this.server.of('/').to(roomId).emit('error', '5');
+			this.server.of('/').to(roomId).emit('error', '5', client.data.user.id);
 			client.leave(roomId);
 			return;
 		}
@@ -88,7 +88,7 @@ export class ChatGateway
 		const updateRoom = await this.roomRepository.updateParticipants(room);
 
 		if (updateRoom === '6') {
-			this.server.of('/').to(roomId).emit('error', '6');
+			this.server.of('/').to(roomId).emit('error', '6', client.data.user.id);
 			client.leave(roomId);
 			return;
 		}
@@ -108,21 +108,21 @@ export class ChatGateway
 		const roomId = client.handshake.query.roomId as string;
 
 		if (!ObjectId.isValid(roomId)) {
-			this.server.of('/').to(roomId).emit('error', '2');
+			this.server.of('/').to(roomId).emit('error', '2', client.data.user.id);
 			return;
 		}
 
 		const payload: IJwtPayload = client.data.user;
 
 		if (!payload) {
-			this.server.of('/').to(roomId).emit('error', '3');
+			this.server.of('/').to(roomId).emit('error', '3', client.data.user.id);
 			return;
 		}
 
 		const room: Room | '4' = await this.roomService.validateRoom(roomId);
 
 		if (room === '4') {
-			this.server.of('/').to(roomId).emit('error', '4');
+			this.server.of('/').to(roomId).emit('error', '4', client.data.user.id);
 			return;
 		}
 
@@ -131,14 +131,14 @@ export class ChatGateway
 		room.participants = room.participants.filter((id) => id !== payload.id);
 
 		if (participantsLength === room.participants.length) {
-			this.server.of('/').to(roomId).emit('error', '7');
+			this.server.of('/').to(roomId).emit('error', '7', client.data.user.id);
 			return;
 		}
 
 		const updateRoom = await this.roomRepository.updateParticipants(room);
 
 		if (updateRoom === '6') {
-			this.server.of('/').to(roomId).emit('error', '6');
+			this.server.of('/').to(roomId).emit('error', '6', client.data.user.id);
 			return;
 		}
 
@@ -163,20 +163,20 @@ export class ChatGateway
 		const { color, nickname, id }: IJwtPayload = client.data.user;
 
 		if (!nickname) {
-			this.server.of('/').to(roomId).emit('error', '3');
+			this.server.of('/').to(roomId).emit('error', '3', client.data.user.id);
 			return;
 		}
 
 		const chat = await this.chatService.saveChat({ roomId, senderId: id, message });
 		if (chat === '8' || chat === '9') {
-			this.server.of('/').to(roomId).emit('error', chat);
+			this.server.of('/').to(roomId).emit('error', chat, client.data.user.id);
 			return;
 		}
 
 		const room = await this.roomRepository.validateRoom(roomId);
 
 		if (room === '4') {
-			this.server.of('/').to(roomId).emit('error', '4');
+			this.server.of('/').to(roomId).emit('error', '4', client.data.user.id);
 			return;
 		}
 
